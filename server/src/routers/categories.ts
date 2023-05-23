@@ -27,4 +27,33 @@ router.get("/", async (_: Request, res: Response) => {
   }
 });
 
+router.get("/:_id", async (req: Request, res: Response, next) => {
+  try {
+    const pk = Number(req.params._id);
+
+    if (isNaN(pk)) {
+      throw {
+        status: 404,
+        message: "해당 카테고리를 찾을 수 없습니다.",
+      };
+    }
+
+    const category = await Category.findByPk(pk);
+
+    if (category) {
+      return res.json(category.dataValues);
+    }
+
+    throw {
+      status: 404,
+      message: "해당 카테고리를 찾을 수 없습니다.",
+    };
+  } catch (error: any) {
+    const status = error?.status || 400;
+    const message = error?.message || "Internal server error";
+
+    res.status(status).json({ error: message });
+  }
+});
+
 export default router;
