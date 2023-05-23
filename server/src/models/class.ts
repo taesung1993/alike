@@ -1,4 +1,4 @@
-import { Association, DataTypes, Model } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../config/db";
 import { Category } from "./category";
 
@@ -18,9 +18,9 @@ interface Models {
   Class: typeof Class;
 }
 
-type CategoryCreationAttributes = Omit<IClass, "id">;
+type ClassCreationAttributes = Omit<IClass, "id">;
 
-export class Class extends Model<IClass, CategoryCreationAttributes> {
+export class Class extends Model<IClass, ClassCreationAttributes> {
   declare id: number;
   declare name: string;
   declare description: string;
