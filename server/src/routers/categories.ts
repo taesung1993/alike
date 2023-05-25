@@ -25,7 +25,7 @@ router.get("/", async (_: Request, res: Response) => {
         include: [
           [
             sequelize.literal(
-              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")'
+              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")::integer'
             ),
             "classCount",
           ],
@@ -49,7 +49,7 @@ router.get("/:_id", async (req: Request, res: Response) => {
         include: [
           [
             sequelize.literal(
-              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")'
+              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "category"."id")::integer'
             ),
             "classCount",
           ],
