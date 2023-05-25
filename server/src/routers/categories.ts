@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { Category } from "../models/category";
+import { sequelize } from "../config/db";
 
 const router = express.Router();
 
@@ -20,6 +21,7 @@ router.post(
 router.get("/", async (_: Request, res: Response) => {
   try {
     const categories = await Category.findAll();
+
     res.json(categories);
   } catch (error) {
     console.error("Error creating user:", error);
@@ -27,27 +29,24 @@ router.get("/", async (_: Request, res: Response) => {
   }
 });
 
-router.get("/:_id", async (req: Request, res: Response, next) => {
+router.get("/:_id", async (req: Request, res: Response) => {
   try {
     const pk = Number(req.params._id);
 
-    if (isNaN(pk)) {
-      throw {
-        status: 404,
-        message: "해당 카테고리를 찾을 수 없습니다.",
-      };
-    }
+    const category = await Category.findByPk(pk, {
+      attributes: {
+        include: [
+          [
+            sequelize.literal(
+              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")'
+            ),
+            "classes",
+          ],
+        ],
+      },
+    });
 
-    const category = await Category.findByPk(pk);
-
-    if (category) {
-      return res.json(category.dataValues);
-    }
-
-    throw {
-      status: 404,
-      message: "해당 카테고리를 찾을 수 없습니다.",
-    };
+    return res.json(category?.dataValues || null);
   } catch (error: any) {
     const status = error?.status || 400;
     const message = error?.message || "Internal server error";
