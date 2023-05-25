@@ -1,6 +1,12 @@
-import { DataTypes, Model } from "sequelize";
+import {
+  DataTypes,
+  ForeignKey,
+  Model,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from "sequelize";
 import { sequelize } from "../config/db";
-import { Category } from "./category";
 
 export interface IClass {
   id: number;
@@ -13,15 +19,11 @@ export interface IClass {
   categoryId: number;
 }
 
-interface Models {
-  Category: typeof Category;
-  Class: typeof Class;
-}
-
-type ClassCreationAttributes = Omit<IClass, "id">;
-
-export class Class extends Model<IClass, ClassCreationAttributes> {
-  declare id: number;
+export class Class extends Model<
+  InferAttributes<Class>,
+  InferCreationAttributes<Class>
+> {
+  declare id: CreationOptional<number>;
   declare name: string;
   declare description: string;
   declare location: string;
@@ -29,8 +31,6 @@ export class Class extends Model<IClass, ClassCreationAttributes> {
   declare status: string;
   declare maximumPerson: number;
   declare categoryId: number;
-
-  declare static associate: (models: Models) => void;
 }
 
 Class.init(
@@ -62,11 +62,11 @@ Class.init(
       allowNull: false,
     },
     maximumPerson: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     categoryId: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
@@ -75,12 +75,5 @@ Class.init(
     sequelize,
   }
 );
-
-Class.associate = (models) => {
-  Class.belongsTo(models.Category, {
-    foreignKey: "categoryId",
-    targetKey: "id",
-  });
-};
 
 export default {};

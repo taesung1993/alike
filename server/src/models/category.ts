@@ -1,4 +1,10 @@
-import { DataTypes, Model } from "sequelize";
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from "sequelize";
 import { sequelize } from "../config/db";
 import { Class } from "./class";
 
@@ -7,18 +13,12 @@ export interface ICategory {
   name: string;
 }
 
-interface Models {
-  Category: typeof Category;
-  Class: typeof Class;
-}
-
-type CategoryCreationAttributes = Omit<ICategory, "id">;
-
-export class Category extends Model<ICategory, CategoryCreationAttributes> {
-  declare id: number;
+export class Category extends Model<
+  InferAttributes<Category>,
+  InferCreationAttributes<Category>
+> {
+  declare id: CreationOptional<Category>;
   declare name: string;
-
-  declare static associate: (models: Models) => void;
 }
 
 Category.init(
@@ -40,11 +40,10 @@ Category.init(
   }
 );
 
-Category.associate = (models) => {
-  Category.hasMany(models.Class, {
-    foreignKey: "categoryId",
-    sourceKey: "id",
-  });
-};
+Category.hasMany(Class, {
+  sourceKey: "id",
+  foreignKey: "categoryId",
+  as: "class",
+});
 
 export default {};
