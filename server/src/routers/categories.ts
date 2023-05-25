@@ -20,7 +20,18 @@ router.post(
 
 router.get("/", async (_: Request, res: Response) => {
   try {
-    const categories = await Category.findAll();
+    const categories = await Category.findAll({
+      attributes: {
+        include: [
+          [
+            sequelize.literal(
+              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")'
+            ),
+            "classCount",
+          ],
+        ],
+      },
+    });
 
     res.json(categories);
   } catch (error) {
@@ -40,7 +51,7 @@ router.get("/:_id", async (req: Request, res: Response) => {
             sequelize.literal(
               '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")'
             ),
-            "classes",
+            "classCount",
           ],
         ],
       },
