@@ -1,3 +1,4 @@
 node_modules
 dist
 .env
+alike-backend-service-account-key.json
