@@ -1,6 +1,5 @@
 import {
   DataTypes,
-  ForeignKey,
   Model,
   InferAttributes,
   InferCreationAttributes,
