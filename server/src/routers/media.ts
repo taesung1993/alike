@@ -9,16 +9,18 @@ const upload = multer({
   dest: "uploads/",
   fileFilter: function (req, file, cb) {
     const { mimetype } = file;
-    const supportedMimetypes = ["image/png", "image/jpg", "image/jpeg"];
 
-    if (supportedMimetypes.includes(mimetype)) {
+    if (mimetype.match(/image\/(jpg|jpeg|png)$/)) {
       cb(null, true);
       return;
     }
 
     cb(new Error("NOT_ALLOW_MIME_TYPE"));
   },
-}).single("file");
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+}).array("files", 2);
 
 const router = express.Router();
 
