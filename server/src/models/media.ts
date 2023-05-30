@@ -4,8 +4,6 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  Sequelize,
-  NonAttribute,
 } from "sequelize";
 import { sequelize } from "../config/db";
 
@@ -47,5 +45,4 @@ Media.init(
     sequelize,
   }
 );
-
 export default {};

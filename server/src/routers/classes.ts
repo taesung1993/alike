@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { Media } from "../models/media";
 import { Category } from "../models/category";
 import { Class } from "../models/class";
 
@@ -35,6 +36,8 @@ router.post("/", async (req: Request, res: Response) => {
       maximumPerson,
       categoryId,
     });
+
+    await classItem.addPhotos(["c56dc7bd-7279-4309-b749-4a86d3345fae"]);
 
     return res.json(classItem.dataValues);
   } catch (error) {

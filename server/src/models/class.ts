@@ -4,8 +4,12 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasManyGetAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyAddAssociationsMixin,
 } from "sequelize";
 import { sequelize } from "../config/db";
+import { Media, MediaModel } from "./media";
 
 export interface IClass {
   id: number;
@@ -16,6 +20,7 @@ export interface IClass {
   status: string;
   maximumPerson: number;
   categoryId: number;
+  // photos: string[];
 }
 
 export class Class extends Model<
@@ -30,6 +35,10 @@ export class Class extends Model<
   declare status: string;
   declare maximumPerson: number;
   declare categoryId: number;
+  // declare photos: string[];
+  declare getPhotos: HasManyGetAssociationsMixin<Media>;
+  declare setPhotos: HasManySetAssociationsMixin<Media, string>;
+  declare addPhotos: HasManyAddAssociationsMixin<Media, string>;
 }
 
 Class.init(
@@ -68,11 +77,26 @@ Class.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    // photos: {
+    //   type: DataTypes.ARRAY(DataTypes.STRING),
+    //   allowNull: false,
+    // },
   },
   {
     tableName: "class",
     sequelize,
   }
 );
+
+Class.hasMany(Media, {
+  sourceKey: "id",
+  foreignKey: "modelId",
+  as: "photos",
+});
+
+Media.belongsTo(Class, {
+  targetKey: "id",
+  foreignKey: "modelId",
+});
 
 export default {};
