@@ -1,26 +1,39 @@
 import cloudStorageService from "./cloud-storage.service";
-import { Media } from "../models/media";
+import { Media, MediaModel } from "../models/media";
+import { Bucket } from "@google-cloud/storage";
 
 class ClassService {
   async createMedia(files: Express.Multer.File[]) {
-    const file = files[0];
-    const type = file.mimetype.split("/")[1].toLowerCase();
     const bucket = cloudStorageService.bucket;
+    const length = files.length;
 
     if (!bucket) {
       throw new Error("에러가 발생하였습니다.");
     }
 
-    const response = await Media.build({
+    const body: Array<{ model: MediaModel }> = Array.from({ length }, (_) => ({
       model: "class",
-    });
+    }));
 
-    const id = response.get("id");
+    const responses = await Media.bulkBuild(body);
+    const promises = responses.map((media, index) =>
+      this.saveMediaAndUploadCloudStorage(bucket, media, files[index])
+    );
+    const data = await Promise.all(promises);
+    return data;
+  }
+
+  private async saveMediaAndUploadCloudStorage(
+    bucket: Bucket,
+    media: Media,
+    file: Express.Multer.File
+  ) {
+    const type = file.mimetype.split("/")[1].toLowerCase();
+    const id = media.get("id");
     const url = `dev/media/class/${id}.${type}`;
-    response.url = url;
+    media.url = url;
 
-    await response.save();
-
+    await media.save();
     const blob = bucket!.file(url);
     const blobStream = blob.createWriteStream({
       resumable: false,
@@ -33,7 +46,7 @@ class ClassService {
       buffer: file.buffer,
     });
 
-    return response.dataValues;
+    return media;
   }
 }
 
