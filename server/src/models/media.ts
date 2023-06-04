@@ -45,4 +45,5 @@ Media.init(
     sequelize,
   }
 );
+
 export default {};

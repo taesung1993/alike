@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Class } from "../models/class";
 import { BaseError } from "sequelize";
+import { Media } from "../models/media";
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post("/", async (req: Request, res: Response) => {
   } = req.body;
 
   try {
-    const classItem = await Class.build({
+    const createdClassItem = await Class.create({
       name,
       description,
       location,
@@ -36,22 +37,31 @@ router.post("/", async (req: Request, res: Response) => {
       maximumPerson,
       categoryId,
     });
+    await createdClassItem.addMedia(media);
 
-    await classItem.addPhotos(media);
-    await classItem.save();
-
-    const photos = await classItem.getPhotos();
-
-    return res.json({
-      ...classItem.dataValues,
-      photos: photos,
+    const id = createdClassItem.getDataValue("id");
+    const classItem = await Class.findByPk(id!, {
+      include: {
+        model: Media,
+        as: "media",
+        attributes: ["id", "model", "url"],
+        through: {
+          attributes: [],
+        },
+      },
     });
+
+    return res.json(classItem);
   } catch (error) {
     if (error instanceof BaseError) {
       return res.status(500).json({ error: error.message });
     }
 
-    res.status(500).json({ error: "Internal server error" });
+    if (error instanceof TypeError) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 
