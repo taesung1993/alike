@@ -8,7 +8,20 @@ const router = express.Router();
 router.get("/", async (_: Request, res: Response) => {
   try {
     const classes = await Class.findAll();
+
     res.json(classes);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/:_id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params._id as string | undefined;
+    const classItem = await Class.findByPk(id);
+
+    res.json(classItem);
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ error: "Internal server error" });

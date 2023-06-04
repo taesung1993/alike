@@ -4,20 +4,6 @@ import { sequelize } from "../config/db";
 
 const router = express.Router();
 
-router.post(
-  "/",
-  async (req: Request<any, any, { name: string }>, res: Response) => {
-    const { name } = req.body;
-    try {
-      const category = await Category.create({ name });
-      res.json(category);
-    } catch (error) {
-      console.error("Error creating user:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
-);
-
 router.get("/", async (_: Request, res: Response) => {
   try {
     const categories = await Category.findAll({
@@ -65,5 +51,19 @@ router.get("/:_id", async (req: Request, res: Response) => {
     res.status(status).json({ error: message });
   }
 });
+
+router.post(
+  "/",
+  async (req: Request<any, any, { name: string }>, res: Response) => {
+    const { name } = req.body;
+    try {
+      const category = await Category.create({ name });
+      res.json(category);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
 
 export default router;
