@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { Media } from "../models/media";
 import { Category } from "../models/category";
 import { Class } from "../models/class";
+import { BaseError, Sequelize } from "sequelize";
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post("/", async (req: Request, res: Response) => {
   } = req.body;
 
   try {
-    const classItem = await Class.create({
+    const classItem = await Class.build({
       name,
       description,
       location,
@@ -37,11 +38,21 @@ router.post("/", async (req: Request, res: Response) => {
       categoryId,
     });
 
-    await classItem.addPhotos(["c56dc7bd-7279-4309-b749-4a86d3345fae"]);
+    await classItem.addPhotos(["c56dc7bd-7279-4309-b749-4a86d3345fae1"]);
+    await classItem.save();
 
-    return res.json(classItem.dataValues);
+    const photos = await classItem.getPhotos();
+    console.log(photos);
+
+    return res.json({
+      ...classItem.dataValues,
+      photos: photos,
+    });
   } catch (error) {
-    console.error("Error creating user:", error);
+    if (error instanceof BaseError) {
+      return res.status(500).json({ error: error.message });
+    }
+
     res.status(500).json({ error: "Internal server error" });
   }
 });
