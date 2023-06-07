@@ -5,7 +5,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from "sequelize";
-import { sequelize } from "../config/db";
+import { sequelize } from "@config/db";
 
 export type MediaModel = "class" | "user";
 

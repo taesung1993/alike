@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import { BaseError } from "sequelize";
-import { multipleMediaMulter } from "../middlewares/multer.middleware";
-import classService from "../services/class.service";
-import { Media } from "../models/media";
-import CustomError from "../classes/custom-error.class";
+import { multipleMediaMulter } from "@middlewares/multer.middleware";
+import classService from "@services/class.service";
+import { Media } from "@models/media";
+import CustomError from "@classes/custom-error.class";
 
 const router = express.Router();
 

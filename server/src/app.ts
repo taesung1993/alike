@@ -1,7 +1,7 @@
 import express, { Express } from "express";
-import routers from "./routers";
 import helmet from "helmet";
-import { sequelize } from "./config/db";
+import routers from "@routers/.";
+import { sequelize } from "@config/db";
 
 const app: Express = express();
 export const initServer = async (port: number) => {

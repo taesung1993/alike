@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import { Class } from "../models/class";
 import { BaseError } from "sequelize";
-import { Media } from "../models/media";
+import { Class } from "@models/class";
+import { Media } from "@models/media";
 
 const router = express.Router();
 

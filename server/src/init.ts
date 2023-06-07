@@ -1,7 +1,7 @@
 import "./dotenv";
 
 import { initServer } from "./app";
-import { initDatabase } from "./config/db";
+import { initDatabase } from "@config/db";
 
 const port = 5000;
 

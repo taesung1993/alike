@@ -10,8 +10,8 @@ import {
   BelongsToManyHasAssociationsMixin,
   BelongsToManyCreateAssociationMixin,
 } from "sequelize";
-import { sequelize } from "../config/db";
-import { Media } from "./media";
+import { sequelize } from "@config/db";
+import { Media } from "@models/media";
 
 export interface IClass {
   id: number;

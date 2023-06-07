@@ -5,8 +5,8 @@ import {
   InferCreationAttributes,
   Model,
 } from "sequelize";
-import { sequelize } from "../config/db";
-import { Class } from "./class";
+import { Class } from "@models/class";
+import { sequelize } from "@config/db";
 
 export interface ICategory {
   id: number;

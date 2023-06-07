@@ -1,7 +1,7 @@
 import express from "express";
-import categories from "./categories";
-import classes from "./classes";
-import media from "./media";
+import categories from "@routers/categories";
+import classes from "@routers/classes";
+import media from "@routers/media";
 
 const routers = express.Router();
 

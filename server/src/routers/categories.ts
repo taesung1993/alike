@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import { Category } from "../models/category";
-import { sequelize } from "../config/db";
+import { Category } from "@models/category";
+import { sequelize } from "@config/db";
 
 const router = express.Router();
 

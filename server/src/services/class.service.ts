@@ -1,6 +1,6 @@
-import cloudStorageService from "./cloud-storage.service";
-import { Media, MediaModel } from "../models/media";
 import { Bucket } from "@google-cloud/storage";
+import cloudStorageService from "@services/cloud-storage.service";
+import { Media, MediaModel } from "@models/media";
 
 class ClassService {
   async createMedia(files: Express.Multer.File[]) {
