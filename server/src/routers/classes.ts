@@ -19,7 +19,16 @@ router.get("/", async (_: Request, res: Response) => {
 router.get("/:_id", async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
-    const classItem = await Class.findByPk(id);
+    const classItem = await Class.findByPk(id, {
+      include: {
+        model: Media,
+        as: "media",
+        attributes: ["id", "model", "url"],
+        through: {
+          attributes: [],
+        },
+      },
+    });
 
     res.json(classItem);
   } catch (error) {
