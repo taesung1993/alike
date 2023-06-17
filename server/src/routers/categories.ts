@@ -1,8 +1,11 @@
 import express, { Request, Response } from "express";
 import { Category } from "@models/category";
 import { sequelize } from "@config/db";
+import { authMiddleware } from "@middlewares/auth.middleware";
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get("/", async (_: Request, res: Response) => {
   try {

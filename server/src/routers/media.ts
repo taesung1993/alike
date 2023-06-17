@@ -4,8 +4,11 @@ import { multipleMediaMulter } from "@middlewares/multer.middleware";
 import classService from "@services/class.service";
 import { Media } from "@models/media";
 import CustomError from "@classes/custom-error.class";
+import { authMiddleware } from "@middlewares/auth.middleware";
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get("/", async (req: Request, res: Response) => {
   try {
