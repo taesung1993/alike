@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { User } from "@models/user";
 import jwtService from "@services/jwt.service";
 import { authMiddleware } from "@middlewares/auth.middleware";
+import { BaseError } from "sequelize";
 
 const router = express.Router();
 
@@ -55,6 +55,25 @@ router.get("/me", authMiddleware, async (req: Request, res: Response) => {
   delete res.locals["user"];
 
   return res.status(200).json(user);
+});
+
+router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findByPk(id);
+
+    user?.destroy({ force: true });
+
+    return res.status(200).json({ message: "success" });
+  } catch (error) {
+    if (error instanceof BaseError) {
+      return res.status(404).json({ message: error.message });
+    }
+
+    return res
+      .status(500)
+      .json({ message: "알 수 없는 에러가 발생하였습니다." });
+  }
 });
 
 export default router;
