@@ -5,6 +5,7 @@ import classService from "@services/class.service";
 import { Media } from "@models/media";
 import CustomError from "@classes/custom-error.class";
 import { authMiddleware } from "@middlewares/auth.middleware";
+import cloudStorageService from "@services/cloud-storage.service";
 
 const router = express.Router();
 
@@ -40,11 +41,45 @@ router.get("/:_id", async (req: Request, res: Response) => {
 
 router.post("/", multipleMediaMulter, async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
+  const { model } = req.body;
   let data: any = null;
 
   if (files) {
     try {
-      data = await classService.createMedia(files);
+      console.log("model:", model);
+      switch (model) {
+        case "class":
+          // data = await classService.createMedia(files);
+          break;
+        case "avatar":
+          const file = files[0];
+          const media = await Media.build({
+            model,
+          });
+          const bucket = cloudStorageService.bucket;
+          const type = files[0].mimetype.split("/")[1].toLowerCase();
+          const id = media.get("id");
+          const url = `dev/media/avatar/${id}.${type}`;
+          const blob = bucket!.file(url);
+
+          const blobStream = blob.createWriteStream({
+            resumable: false,
+          });
+          const filePath = `https://storage.googleapis.com/${url}`;
+
+          await cloudStorageService.upload({
+            blobStream,
+            filePath,
+            buffer: file.buffer,
+          });
+
+          media.url = url;
+          await media.save();
+
+          console.log(media);
+
+          break;
+      }
     } catch (error) {
       if (error instanceof BaseError) {
         return res.status(500).json({ error: error.message });

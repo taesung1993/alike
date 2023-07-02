@@ -4,14 +4,8 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  BelongsToManyGetAssociationsMixin,
-  BelongsToManySetAssociationsMixin,
-  BelongsToManyAddAssociationsMixin,
-  BelongsToManyHasAssociationsMixin,
-  BelongsToManyCreateAssociationMixin,
 } from "sequelize";
 import { sequelize } from "@config/db";
-import { Media } from "@models/media";
 
 export interface IClass {
   id: number;
@@ -21,7 +15,7 @@ export interface IClass {
   startDate: string;
   status: string;
   maximumPerson: number;
-  categoryId: number;
+  category: number;
 }
 
 export class Class extends Model<
@@ -35,20 +29,14 @@ export class Class extends Model<
   declare startDate: string;
   declare status: string;
   declare maximumPerson: number;
-  declare categoryId: number;
-
-  declare getMedia: BelongsToManyGetAssociationsMixin<Media>;
-  declare setMedia: BelongsToManySetAssociationsMixin<Media, number>;
-  declare addMedia: BelongsToManyAddAssociationsMixin<Media, number>;
-  declare hasMedia: BelongsToManyHasAssociationsMixin<Media, number>;
-  declare createMedia: BelongsToManyCreateAssociationMixin<Media>;
+  declare category: number;
 }
 
 Class.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
@@ -76,7 +64,7 @@ Class.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    categoryId: {
+    category: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -86,16 +74,5 @@ Class.init(
     sequelize,
   }
 );
-
-Class.belongsToMany(Media, {
-  through: "classMedia",
-  as: "media",
-  foreignKey: "classId",
-});
-Media.belongsToMany(Class, {
-  through: "classMedia",
-  as: "application",
-  foreignKey: "mediaId",
-});
 
 export default {};

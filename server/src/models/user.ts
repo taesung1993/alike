@@ -1,4 +1,5 @@
 import {
+  Association,
   CreationOptional,
   DataTypes,
   InferAttributes,
@@ -6,6 +7,7 @@ import {
   Model,
 } from "sequelize";
 import { sequelize } from "@config/db";
+import { Media } from "./media";
 
 export interface IUser {
   id: string;
@@ -22,6 +24,10 @@ export class User extends Model<
   declare name: string;
   declare email: string;
   declare password: string;
+
+  declare static associations: {
+    avatar: Association<User, Media>;
+  };
 }
 
 User.init(
@@ -30,6 +36,7 @@ User.init(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
@@ -49,3 +56,5 @@ User.init(
     sequelize,
   }
 );
+
+export default {};

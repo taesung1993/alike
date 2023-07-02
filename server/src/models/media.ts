@@ -7,7 +7,7 @@ import {
 } from "sequelize";
 import { sequelize } from "@config/db";
 
-export type MediaModel = "class" | "user";
+export type MediaModel = "class" | "user" | "avatar";
 
 export interface IMedia {
   id: string;

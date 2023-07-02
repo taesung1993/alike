@@ -1,6 +1,7 @@
 import {
   CreationOptional,
   DataTypes,
+  HasManyGetAssociationsMixin,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -19,6 +20,8 @@ export class Category extends Model<
 > {
   declare id: CreationOptional<Category>;
   declare name: string;
+
+  declare getClasses: HasManyGetAssociationsMixin<Class>;
 }
 
 Category.init(
@@ -39,11 +42,5 @@ Category.init(
     sequelize,
   }
 );
-
-Category.hasMany(Class, {
-  sourceKey: "id",
-  foreignKey: "categoryId",
-  as: "class",
-});
 
 export default {};

@@ -2,11 +2,12 @@ import express, { Express } from "express";
 import helmet from "helmet";
 import routers from "@routers/.";
 import { sequelize } from "@config/db";
+import "@models/assocations";
 
 const app: Express = express();
 export const initServer = async (port: number) => {
   try {
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     app.listen(port, () => {
       console.log(`[server]: Server is running at ${port}`);
     });
