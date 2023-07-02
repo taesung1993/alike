@@ -1,93 +1,23 @@
-import express, { Request, Response } from "express";
-import { BaseError } from "sequelize";
-import { Class } from "@models/class";
-import { Media } from "@models/media";
-import { authMiddleware } from "@middlewares/auth.middleware";
+import express from "express";
+import {
+  createClass,
+  deleteClass,
+  getClass,
+  getClasses,
+  patchClass,
+} from "@controllers/classes";
 
 const router = express.Router();
 
-router.use(authMiddleware);
+// router.use(authMiddleware);
 
-router.get("/", async (_: Request, res: Response) => {
-  try {
-    const classes = await Class.findAll();
+router.get("/", getClasses);
+router.get("/:_id", getClass);
 
-    res.json(classes);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+router.post("/", createClass);
 
-router.get("/:_id", async (req: Request, res: Response) => {
-  try {
-    const id = req.params._id as string | undefined;
-    const classItem = await Class.findByPk(id, {
-      include: {
-        model: Media,
-        as: "media",
-        attributes: ["id", "model", "url"],
-        through: {
-          attributes: [],
-        },
-      },
-    });
+router.patch("/:_id", patchClass);
 
-    res.json(classItem);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-router.post("/", async (req: Request, res: Response) => {
-  const {
-    name,
-    description,
-    location,
-    startDate,
-    status,
-    maximumPerson,
-    categoryId,
-    media,
-  } = req.body;
-
-  try {
-    const createdClassItem = await Class.create({
-      name,
-      description,
-      location,
-      startDate,
-      status,
-      maximumPerson,
-      categoryId,
-    });
-    await createdClassItem.addMedia(media);
-
-    const id = createdClassItem.getDataValue("id");
-    const classItem = await Class.findByPk(id!, {
-      include: {
-        model: Media,
-        as: "media",
-        attributes: ["id", "model", "url"],
-        through: {
-          attributes: [],
-        },
-      },
-    });
-
-    return res.json(classItem);
-  } catch (error) {
-    if (error instanceof BaseError) {
-      return res.status(500).json({ error: error.message });
-    }
-
-    if (error instanceof TypeError) {
-      return res.status(400).json({ error: error.message });
-    }
-
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
+router.delete("/:_id", deleteClass);
 
 export default router;
