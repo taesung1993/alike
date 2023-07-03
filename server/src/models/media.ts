@@ -7,12 +7,12 @@ import {
 } from "sequelize";
 import { sequelize } from "@config/db";
 
-export type MediaModel = "class" | "user" | "avatar";
-
 export interface IMedia {
   id: string;
   url: string;
-  model: MediaModel;
+  name: string;
+  type: string;
+  model: "avatar" | "class";
 }
 
 export class Media extends Model<
@@ -20,8 +20,10 @@ export class Media extends Model<
   InferCreationAttributes<Media>
 > {
   declare id: CreationOptional<string>;
-  declare model: MediaModel;
   declare url: CreationOptional<string>;
+  declare name: CreationOptional<string>;
+  declare type: CreationOptional<string>;
+  declare model: string;
 }
 
 Media.init(
@@ -31,11 +33,19 @@ Media.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    model: {
+    url: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    url: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    model: {
       type: DataTypes.STRING,
       allowNull: false,
     },

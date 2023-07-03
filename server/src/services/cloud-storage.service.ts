@@ -39,6 +39,10 @@ class CloudStorageService {
     });
   }
 
+  delete({}) {
+    this.bucket?.deleteFiles();
+  }
+
   get bucket() {
     return this._bucket;
   }
