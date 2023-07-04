@@ -6,6 +6,7 @@ import {
   getCategories,
   getCategory,
 } from "@controllers/categories";
+import { body } from "express-validator";
 
 const router = express.Router();
 
@@ -13,7 +14,16 @@ const router = express.Router();
 router.get("/", getCategories);
 router.get("/:_id", getCategory);
 
-router.post("/", createCategory);
+router.post(
+  "/",
+  [
+    body("name")
+      .trim()
+      .notEmpty()
+      .withMessage("'name'(body) is empty or missing"),
+  ],
+  createCategory
+);
 
 router.delete("/:_id", deleteCategory);
 

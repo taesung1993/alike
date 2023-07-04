@@ -2,17 +2,31 @@ import CustomError from "@classes/custom-error.class";
 import { sequelize } from "@config/db";
 import { Category } from "@models/category";
 import { Request, Response } from "express";
+import { validationResult } from "express-validator";
 
 export const createCategory = async (
   req: Request<any, any, { name: string }>,
   res: Response
 ) => {
-  const { name } = req.body;
   try {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      const { msg } = result.mapped()["name"];
+      throw new CustomError({
+        status: 400,
+        message: msg,
+      });
+    }
+
+    const { name } = req.body;
     const category = await Category.create({ name });
     res.json(category);
   } catch (error) {
-    console.error("Error creating user:", error);
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
     res.status(500).json({ error: "Internal server error" });
   }
 };
