@@ -1,6 +1,7 @@
 import CustomError from "@classes/custom-error.class";
 import { Class } from "@models/class";
 import { Request, Response } from "express";
+import { validationResult } from "express-validator";
 import { BaseError } from "sequelize";
 
 export const getClasses = async (_: Request, res: Response) => {
@@ -54,6 +55,15 @@ export const createClass = async (req: Request, res: Response) => {
   } = req.body;
 
   try {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      throw new CustomError({
+        status: 400,
+        message: result.array()[0].msg,
+      });
+    }
+
     const createdClassItem = await Class.create({
       name,
       description,
@@ -74,6 +84,10 @@ export const createClass = async (req: Request, res: Response) => {
 
     return res.json(json);
   } catch (error) {
+    if (error instanceof CustomError) {
+      return res.status(500).json({ error: error.message });
+    }
+
     if (error instanceof BaseError) {
       return res.status(500).json({ error: error.message });
     }
