@@ -4,8 +4,11 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationsMixin,
 } from "sequelize";
 import { sequelize } from "@config/db";
+import { Media } from "./media";
 
 export interface IClass {
   id: number;
@@ -30,6 +33,9 @@ export class Class extends Model<
   declare status: string;
   declare maximumPerson: number;
   declare category: number;
+
+  declare getMedia: HasManyGetAssociationsMixin<Media>;
+  declare addMedia: HasManyAddAssociationsMixin<Media, string>;
 }
 
 Class.init(

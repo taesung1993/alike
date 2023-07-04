@@ -64,7 +64,15 @@ export const createClass = async (req: Request, res: Response) => {
       category,
     });
 
-    return res.json(createdClassItem.toJSON());
+    await createdClassItem.addMedia(media);
+    const mediaOfCreatedClass = await createdClassItem.getMedia();
+
+    const json = {
+      ...createdClassItem.toJSON(),
+      media: mediaOfCreatedClass,
+    };
+
+    return res.json(json);
   } catch (error) {
     if (error instanceof BaseError) {
       return res.status(500).json({ error: error.message });
