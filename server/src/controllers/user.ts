@@ -97,7 +97,7 @@ export const getMe = async (_: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = req.params._id;
   try {
     const user = await User.findByPk(id);
 

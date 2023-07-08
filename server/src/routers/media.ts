@@ -6,17 +6,17 @@ import {
   getMedium,
   uploadMedia,
 } from "@controllers/media";
+import ROUTES from "@config/routes";
 
 const router = express.Router();
 
 // router.use(authMiddleware);
 
-router.get("/", getMedia);
+router.get(ROUTES.GET_MEDIA, getMedia);
+router.get(ROUTES.GET_MEDIUM, getMedium);
 
-router.get("/:_id", getMedium);
+router.post(ROUTES.UPLOAD_MEDIA, multipleMediaMulter, uploadMedia);
 
-router.post("/", multipleMediaMulter, uploadMedia);
-
-router.delete("/:_id", deleteMedia);
+router.delete(ROUTES.DELETE_MEDIUM, deleteMedia);
 
 export default router;

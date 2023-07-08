@@ -7,26 +7,22 @@ import {
   signUpNewUser,
   uploadAvatar,
 } from "@controllers/user";
-import { body } from "express-validator";
+import ROUTES from "@config/routes";
+import VALIDATORS from "@config/validators";
 
 const router = express.Router();
 
-router.post("/sign-up", signUpNewUser);
-router.post("/sign-in", signInCurrentUser);
+router.post(ROUTES.SIGN_UP, signUpNewUser);
+router.post(ROUTES.SIGN_IN, signInCurrentUser);
 router.post(
-  "/avatar",
+  ROUTES.UPLOAD_AVATAR,
   authMiddleware,
-  [
-    body("medium")
-      .trim()
-      .notEmpty()
-      .withMessage("'medium'(body) is empty or missing"),
-  ],
+  VALIDATORS.UPLOAD_AVATAR,
   uploadAvatar
 );
 
-router.get("/me", authMiddleware, getMe);
+router.get(ROUTES.GET_ME, authMiddleware, getMe);
 
-router.delete("/:id", authMiddleware, deleteUser);
+router.delete(ROUTES.DELETE_USER, authMiddleware, deleteUser);
 
 export default router;

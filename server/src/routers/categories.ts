@@ -6,25 +6,17 @@ import {
   getCategories,
   getCategory,
 } from "@controllers/categories";
-import { body } from "express-validator";
+import ROUTES from "@config/routes";
+import VALIDATORS from "@config/validators";
 
 const router = express.Router();
 
 // router.use(authMiddleware);
-router.get("/", getCategories);
-router.get("/:_id", getCategory);
+router.get(ROUTES.GET_CATEGORIES, getCategories);
+router.get(ROUTES.GET_CATEGORY, getCategory);
 
-router.post(
-  "/",
-  [
-    body("name")
-      .trim()
-      .notEmpty()
-      .withMessage("'name'(body) is empty or missing"),
-  ],
-  createCategory
-);
+router.post(ROUTES.CREATE_CATEGORY, VALIDATORS.CREATE_CATEGORY, createCategory);
 
-router.delete("/:_id", deleteCategory);
+router.delete(ROUTES.DELETE_CATEGORY, deleteCategory);
 
 export default router;
