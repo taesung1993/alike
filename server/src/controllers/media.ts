@@ -35,7 +35,6 @@ export const getMedium = async (req: Request, res: Response) => {
 export const uploadMedia = async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
   const length = files.length;
-  const { model } = req.body;
   let data: any = null;
 
   if (files) {
@@ -49,13 +48,13 @@ export const uploadMedia = async (req: Request, res: Response) => {
         });
       }
 
-      const media = Media.bulkBuild(new Array(length).fill({ model }));
+      const media = Media.bulkBuild(new Array(length).fill({}));
       const promises = media.map(async (medium, index) => {
         const file = files[index];
         const name = file.originalname;
         const type = file.mimetype.split("/")[1].toLowerCase();
         const id = medium.get("id");
-        const url = `dev/media/${model}/${id}.${type}`;
+        const url = `dev/media/${id}.${type}`;
 
         const blob = bucket.file(url);
         const blobStream = blob.createWriteStream({
@@ -72,7 +71,7 @@ export const uploadMedia = async (req: Request, res: Response) => {
         medium.set({ url, id, name, type });
         await medium.save();
 
-        return media;
+        return medium;
       });
 
       data = await Promise.all(promises);
