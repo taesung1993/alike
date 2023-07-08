@@ -15,15 +15,27 @@ Class.belongsTo(Category, {
 Class.hasMany(Media, {
   foreignKey: "application",
   constraints: false,
+  scope: {
+    modelType: "class",
+  },
   as: "media",
 });
 Media.belongsTo(Class, {
   targetKey: "id",
   foreignKey: "application",
+  constraints: false,
 });
 
-User.hasOne(Media, { foreignKey: "application", constraints: false });
+User.hasOne(Media, {
+  foreignKey: "application",
+  constraints: false,
+  scope: {
+    modelType: "user",
+  },
+  as: "media",
+});
 Media.belongsTo(User, {
   targetKey: "id",
   foreignKey: "application",
+  constraints: false,
 });

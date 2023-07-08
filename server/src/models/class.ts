@@ -6,12 +6,13 @@ import {
   CreationOptional,
   HasManyGetAssociationsMixin,
   HasManyAddAssociationsMixin,
+  Association,
 } from "sequelize";
 import { sequelize } from "@config/db";
 import { Media } from "./media";
 
 export interface IClass {
-  id: number;
+  id: string;
   name: string;
   description: string;
   location: string;
@@ -25,7 +26,7 @@ export class Class extends Model<
   InferAttributes<Class>,
   InferCreationAttributes<Class>
 > {
-  declare id: CreationOptional<number>;
+  declare id: CreationOptional<string>;
   declare name: string;
   declare description: string;
   declare location: string;
@@ -36,6 +37,10 @@ export class Class extends Model<
 
   declare getMedia: HasManyGetAssociationsMixin<Media>;
   declare addMedia: HasManyAddAssociationsMixin<Media, string>;
+
+  static associations: {
+    media: Association<Class, Media>;
+  };
 }
 
 Class.init(

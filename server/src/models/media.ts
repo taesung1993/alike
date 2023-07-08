@@ -24,6 +24,7 @@ export class Media extends Model<
   declare name: CreationOptional<string>;
   declare type: CreationOptional<string>;
   declare model: string;
+  declare modelType: string;
 }
 
 Media.init(
@@ -48,6 +49,10 @@ Media.init(
     model: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    modelType: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

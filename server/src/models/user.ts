@@ -2,6 +2,8 @@ import {
   Association,
   CreationOptional,
   DataTypes,
+  HasOneGetAssociationMixin,
+  HasOneSetAssociationMixin,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -25,7 +27,10 @@ export class User extends Model<
   declare email: string;
   declare password: string;
 
-  declare static associations: {
+  declare setMedia: HasOneSetAssociationMixin<Media, string>;
+  declare getMedia: HasOneGetAssociationMixin<Media>;
+
+  static associations: {
     avatar: Association<User, Media>;
   };
 }
@@ -45,6 +50,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
