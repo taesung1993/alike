@@ -12,7 +12,11 @@ Class.belongsTo(Category, {
   foreignKey: "category",
 });
 
-Class.hasMany(Media, { foreignKey: "application", constraints: false });
+Class.hasMany(Media, {
+  foreignKey: "application",
+  constraints: false,
+  as: "media",
+});
 Media.belongsTo(Class, {
   targetKey: "id",
   foreignKey: "application",

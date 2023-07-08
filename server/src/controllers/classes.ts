@@ -1,12 +1,18 @@
 import CustomError from "@classes/custom-error.class";
 import { Class } from "@models/class";
+import { Media } from "@models/media";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { BaseError } from "sequelize";
 
 export const getClasses = async (_: Request, res: Response) => {
   try {
-    const classes = await Class.findAll();
+    const classes = await Class.findAll({
+      include: {
+        model: Media,
+        as: "media",
+      },
+    });
 
     res.json(classes);
   } catch (error) {
@@ -18,18 +24,12 @@ export const getClasses = async (_: Request, res: Response) => {
 export const getClass = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
-    // const classItem = await Class.findByPk(id, {
-    //   include: {
-    //     model: Media,
-    //     as: "media",
-    //     attributes: ["id", "model", "url"],
-    //     through: {
-    //       attributes: [],
-    //     },
-    //   },
-    // });
-
-    const classItem = await Class.findByPk(id);
+    const classItem = await Class.findByPk(id, {
+      include: {
+        model: Media,
+        as: "media",
+      },
+    });
 
     if (!classItem) {
       return res.json(null);
@@ -125,17 +125,6 @@ export const patchClass = async (req: Request, res: Response) => {
 export const deleteClass = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
-    // const classItem = await Class.findByPk(id, {
-    //   include: {
-    //     model: Media,
-    //     as: "media",
-    //     attributes: ["id", "model", "url"],
-    //     through: {
-    //       attributes: [],
-    //     },
-    //   },
-    // });
-
     const classItem = await Class.findByPk(id);
 
     if (!classItem) {
