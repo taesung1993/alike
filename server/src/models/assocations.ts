@@ -16,7 +16,7 @@ Class.hasMany(Media, {
   foreignKey: "application",
   constraints: false,
   scope: {
-    modelType: "class",
+    model: "class",
   },
   as: "media",
 });
@@ -30,7 +30,7 @@ User.hasOne(Media, {
   foreignKey: "application",
   constraints: false,
   scope: {
-    modelType: "user",
+    model: "user",
   },
   as: "media",
 });

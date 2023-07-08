@@ -12,6 +12,7 @@ export interface IMedia {
   url: string;
   name: string;
   type: string;
+  model: string;
 }
 
 export class Media extends Model<
@@ -22,7 +23,7 @@ export class Media extends Model<
   declare url: CreationOptional<string>;
   declare name: CreationOptional<string>;
   declare type: CreationOptional<string>;
-  declare modelType: string;
+  declare model: string;
 }
 
 Media.init(
@@ -44,7 +45,7 @@ Media.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    modelType: {
+    model: {
       type: DataTypes.STRING,
       allowNull: true,
     },
