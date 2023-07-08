@@ -13,9 +13,13 @@ export const authMiddleware = async (
   try {
     const userIdFromToken = jwtService.getUserIdFromRequest(req);
     const account = await User.findByPk(userIdFromToken);
+    const medium = await account?.getMedia();
     const { password: _, ...user } = account!.dataValues;
 
-    res.locals.user = user;
+    res.locals.user = {
+      ...user,
+      avatar: medium,
+    };
 
     next();
   } catch (error) {
