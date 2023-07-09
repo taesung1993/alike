@@ -20,6 +20,7 @@ const ROUTES = {
   UPLOAD_AVATAR: "/avatar",
   GET_ME: "/me",
   DELETE_USER: "/:_id",
+  CHECK_DUPLICATE_EMAIL: "/check-duplicate-email",
 };
 
 export default ROUTES;

@@ -119,6 +119,35 @@ export const getMe = async (_: Request, res: Response) => {
   return res.status(RESPONSE_CODE.OK).json(user);
 };
 
+export const getIsDuplicateEmail = async (req: Request, res: Response) => {
+  try {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      throw new CustomError({
+        status: RESPONSE_CODE.BAD_REQUEST,
+        message: result.array()[0].msg,
+      });
+    }
+
+    const email = req.query.email as string;
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    return res.json({ isDuplicate: !!user });
+  } catch (error) {
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ message: error.message });
+    }
+    return res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: "알 수 없는 에러가 발생하였습니다." });
+  }
+};
+
 export const deleteUser = async (req: Request, res: Response) => {
   const id = req.params._id;
   try {

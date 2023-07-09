@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 const VALIDATORS = {
   CREATE_CATEGORY: [
@@ -44,6 +44,13 @@ const VALIDATORS = {
       .trim()
       .notEmpty()
       .withMessage("'medium'(body) is empty or missing"),
+  ],
+
+  CHECK_DUPLICATE_EMAIL: [
+    query("email")
+      .trim()
+      .notEmpty()
+      .withMessage("'email'(query) is empty or missing"),
   ],
 };
 

@@ -2,6 +2,7 @@ import express from "express";
 import { authMiddleware } from "@middlewares/auth.middleware";
 import {
   deleteUser,
+  getIsDuplicateEmail,
   getMe,
   signInCurrentUser,
   signUpNewUser,
@@ -21,6 +22,11 @@ router.post(
   uploadAvatar
 );
 
+router.get(
+  ROUTES.CHECK_DUPLICATE_EMAIL,
+  VALIDATORS.CHECK_DUPLICATE_EMAIL,
+  getIsDuplicateEmail
+);
 router.get(ROUTES.GET_ME, authMiddleware, getMe);
 
 router.delete(ROUTES.DELETE_USER, authMiddleware, deleteUser);
