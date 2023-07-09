@@ -1,5 +1,6 @@
 import CustomError from "@classes/custom-error.class";
 import { sequelize } from "@config/db";
+import { RESPONSE_CODE } from "@config/errors";
 import { Category } from "@models/category";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
@@ -14,7 +15,7 @@ export const createCategory = async (
     if (!result.isEmpty()) {
       const { msg } = result.mapped()["name"];
       throw new CustomError({
-        status: 400,
+        status: RESPONSE_CODE.BAD_REQUEST,
         message: msg,
       });
     }
@@ -27,7 +28,9 @@ export const createCategory = async (
       return res.status(error.status).json({ error: error.message });
     }
 
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -48,7 +51,7 @@ export const getCategory = async (req: Request, res: Response) => {
 
     return res.json(json);
   } catch (error: any) {
-    const status = error?.status || 400;
+    const status = error?.status || RESPONSE_CODE.BAD_REQUEST;
     const message = error?.message || "Internal server error";
 
     res.status(status).json({ error: message });
@@ -73,7 +76,9 @@ export const getCategories = async (_: Request, res: Response) => {
     res.json(categories);
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -84,7 +89,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
 
     if (!category) {
       throw new CustomError({
-        status: 404,
+        status: RESPONSE_CODE.NOT_FOUND,
         message: "Not category",
       });
     }
@@ -96,7 +101,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    const status = error?.status || 400;
+    const status = error?.status || RESPONSE_CODE.BAD_REQUEST;
     const message = error?.message || "Internal server error";
 
     res.status(status).json({ error: message });

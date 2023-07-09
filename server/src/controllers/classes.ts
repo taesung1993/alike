@@ -1,4 +1,5 @@
 import CustomError from "@classes/custom-error.class";
+import { RESPONSE_CODE } from "@config/errors";
 import { Class } from "@models/class";
 import { Media } from "@models/media";
 import { Request, Response } from "express";
@@ -17,7 +18,9 @@ export const getClasses = async (_: Request, res: Response) => {
     res.json(classes);
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -38,7 +41,9 @@ export const getClass = async (req: Request, res: Response) => {
     res.json(classItem.toJSON());
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -59,7 +64,7 @@ export const createClass = async (req: Request, res: Response) => {
 
     if (!result.isEmpty()) {
       throw new CustomError({
-        status: 400,
+        status: RESPONSE_CODE.BAD_REQUEST,
         message: result.array()[0].msg,
       });
     }
@@ -85,18 +90,26 @@ export const createClass = async (req: Request, res: Response) => {
     return res.json(json);
   } catch (error) {
     if (error instanceof CustomError) {
-      return res.status(500).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
 
     if (error instanceof BaseError) {
-      return res.status(500).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
 
     if (error instanceof TypeError) {
-      return res.status(400).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.BAD_REQUEST)
+        .json({ error: error.message });
     }
 
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -108,7 +121,7 @@ export const patchClass = async (req: Request, res: Response) => {
     const classItem = await Class.findByPk(id);
     if (!classItem) {
       throw new CustomError({
-        status: 404,
+        status: RESPONSE_CODE.NOT_FOUND,
         message: "Not class",
       });
     }
@@ -118,7 +131,9 @@ export const patchClass = async (req: Request, res: Response) => {
 
     res.json(classItem.toJSON());
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -129,7 +144,7 @@ export const deleteClass = async (req: Request, res: Response) => {
 
     if (!classItem) {
       throw new CustomError({
-        status: 404,
+        status: RESPONSE_CODE.NOT_FOUND,
         message: "Not class",
       });
     }
@@ -144,6 +159,8 @@ export const deleteClass = async (req: Request, res: Response) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };

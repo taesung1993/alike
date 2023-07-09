@@ -1,4 +1,5 @@
 import CustomError from "@classes/custom-error.class";
+import { RESPONSE_CODE } from "@config/errors";
 import { User } from "@models/user";
 import jwtService from "@services/jwt.service";
 import { NextFunction, Request, Response } from "express";
@@ -28,13 +29,19 @@ export const authMiddleware = async (
     }
 
     if (error instanceof JsonWebTokenError) {
-      return res.status(401).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.UNAUTHORIZED)
+        .json({ error: error.message });
     }
 
     if (error instanceof BaseError) {
-      return res.status(401).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.UNAUTHORIZED)
+        .json({ error: error.message });
     }
 
-    res.status(401).json({ error: "유효한 자격 증명이 없습니다." });
+    res
+      .status(RESPONSE_CODE.UNAUTHORIZED)
+      .json({ error: "유효한 자격 증명이 없습니다." });
   }
 };

@@ -5,6 +5,7 @@ import jwtService from "@services/jwt.service";
 import { BaseError } from "sequelize";
 import CustomError from "@classes/custom-error.class";
 import { validationResult } from "express-validator";
+import { RESPONSE_CODE } from "@config/errors";
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -20,7 +21,7 @@ export const signUpNewUser = async (req: Request, res: Response) => {
 
     const token = jwtService.createJWT(user);
 
-    return res.status(201).json({
+    return res.status(RESPONSE_CODE.CREATED).json({
       token,
     });
   } catch (error) {
@@ -28,15 +29,17 @@ export const signUpNewUser = async (req: Request, res: Response) => {
       switch (error.name) {
         case "SequelizeUniqueConstraintError":
           return res
-            .status(409)
+            .status(RESPONSE_CODE.CONFLICT)
             .json({ message: "The Email already registered." });
         default:
-          return res.status(404).json({ message: error.message });
+          return res
+            .status(RESPONSE_CODE.NOT_FOUND)
+            .json({ message: error.message });
       }
     }
 
     return res
-      .status(500)
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
       .json({ message: "알 수 없는 에러가 발생하였습니다." });
   }
 };
@@ -55,13 +58,15 @@ export const signInCurrentUser = async (req: Request, res: Response) => {
     if (isSamePassword) {
       const token = jwtService.createJWT(user);
 
-      return res.status(201).json({
+      return res.status(RESPONSE_CODE.CREATED).json({
         token,
       });
     }
   }
 
-  return res.status(401).json({ error: "Authentication failed" });
+  return res
+    .status(RESPONSE_CODE.UNAUTHORIZED)
+    .json({ error: "Authentication failed" });
 };
 
 export const uploadAvatar = async (req: Request, res: Response) => {
@@ -74,34 +79,34 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 
     if (!result.isEmpty()) {
       throw new CustomError({
-        status: 400,
+        status: RESPONSE_CODE.BAD_REQUEST,
         message: result.array()[0].msg,
       });
     }
 
     if (!user) {
       throw new CustomError({
-        status: 404,
+        status: RESPONSE_CODE.NOT_FOUND,
         message: "Not User",
       });
     }
 
     await user.setMedia(medium);
 
-    return res.status(200).json({ message: "success" });
+    return res.status(RESPONSE_CODE.OK).json({ message: "success" });
   } catch (error) {
-    console.log(error);
-
     if (error instanceof CustomError) {
       return res.status(error.status).json({ message: error.message });
     }
 
     if (error instanceof BaseError) {
-      return res.status(404).json({ message: error.message });
+      return res
+        .status(RESPONSE_CODE.NOT_FOUND)
+        .json({ message: error.message });
     }
 
     return res
-      .status(500)
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
       .json({ message: "알 수 없는 에러가 발생하였습니다." });
   }
 };
@@ -111,7 +116,7 @@ export const getMe = async (_: Request, res: Response) => {
 
   delete res.locals["user"];
 
-  return res.status(200).json(user);
+  return res.status(RESPONSE_CODE.OK).json(user);
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
@@ -121,14 +126,16 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     user?.destroy({ force: true });
 
-    return res.status(200).json({ message: "success" });
+    return res.status(RESPONSE_CODE.OK).json({ message: "success" });
   } catch (error) {
     if (error instanceof BaseError) {
-      return res.status(404).json({ message: error.message });
+      return res
+        .status(RESPONSE_CODE.NOT_FOUND)
+        .json({ message: error.message });
     }
 
     return res
-      .status(500)
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
       .json({ message: "알 수 없는 에러가 발생하였습니다." });
   }
 };

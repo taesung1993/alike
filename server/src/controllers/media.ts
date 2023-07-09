@@ -1,4 +1,5 @@
 import CustomError from "@classes/custom-error.class";
+import { RESPONSE_CODE } from "@config/errors";
 import { Media } from "@models/media";
 import cloudStorageService from "@services/cloud-storage.service";
 import { Request, Response } from "express";
@@ -7,13 +8,17 @@ import { BaseError } from "sequelize";
 export const getMedia = async (_: Request, res: Response) => {
   try {
     const data = await Media.findAll();
-    res.status(200).json(data);
+    res.status(RESPONSE_CODE.OK).json(data);
   } catch (error) {
     if (error instanceof BaseError) {
-      return res.status(500).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
 
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -22,13 +27,17 @@ export const getMedium = async (req: Request, res: Response) => {
     const id = req.params._id as string | undefined;
     const data = await Media.findByPk(id);
 
-    res.status(200).json(data);
+    res.status(RESPONSE_CODE.OK).json(data);
   } catch (error) {
     if (error instanceof BaseError) {
-      return res.status(500).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
 
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
   }
 };
 
@@ -43,7 +52,7 @@ export const uploadMedia = async (req: Request, res: Response) => {
 
       if (!bucket) {
         throw new CustomError({
-          status: 500,
+          status: RESPONSE_CODE.INTERNAL_SERVER_ERROR,
           message: "Not Connet Bucket",
         });
       }
@@ -77,10 +86,14 @@ export const uploadMedia = async (req: Request, res: Response) => {
       data = await Promise.all(promises);
     } catch (error) {
       if (error instanceof BaseError) {
-        return res.status(500).json({ error: error.message });
+        return res
+          .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+          .json({ error: error.message });
       }
 
-      res.status(500).json({ error: "Internal server error" });
+      res
+        .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+        .json({ error: "Internal server error" });
     }
   }
 
@@ -98,7 +111,7 @@ export const deleteMedia = async (req: Request, res: Response) => {
 
       if (!file) {
         throw new CustomError({
-          status: 404,
+          status: RESPONSE_CODE.NOT_FOUND,
           message: "해당 미디어를 찾을 수 없습니다",
         });
       }
@@ -111,22 +124,26 @@ export const deleteMedia = async (req: Request, res: Response) => {
         .delete({ ifGenerationMatch: generation });
       await media?.destroy({ force: true });
 
-      return res.status(200).json({ message: "success" });
+      return res.status(RESPONSE_CODE.OK).json({ message: "success" });
     }
 
     throw new CustomError({
-      status: 404,
+      status: RESPONSE_CODE.NOT_FOUND,
       message: "해당 미디어를 찾을 수 없습니다",
     });
   } catch (error) {
     if (error instanceof BaseError) {
-      return res.status(500).json({ error: error.message });
+      return res
+        .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
 
     if (error instanceof CustomError) {
       return res.status(error.status).json({ error: error.message });
     }
 
-    res.status(500).json({ error: error || "Internal server error" });
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: error || "Internal server error" });
   }
 };
