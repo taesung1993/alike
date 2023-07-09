@@ -8,19 +8,37 @@ import { validationResult } from "express-validator";
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
-  const passwordWithHash = await bcrypt.hash(password, 10);
 
-  const user = await User.create({
-    name,
-    password: passwordWithHash,
-    email,
-  });
+  try {
+    const passwordWithHash = await bcrypt.hash(password, 10);
 
-  const token = jwtService.createJWT(user);
+    const user = await User.create({
+      name,
+      password: passwordWithHash,
+      email,
+    });
 
-  return res.status(201).json({
-    token,
-  });
+    const token = jwtService.createJWT(user);
+
+    return res.status(201).json({
+      token,
+    });
+  } catch (error) {
+    if (error instanceof BaseError) {
+      switch (error.name) {
+        case "SequelizeUniqueConstraintError":
+          return res
+            .status(409)
+            .json({ message: "The Email already registered." });
+        default:
+          return res.status(404).json({ message: error.message });
+      }
+    }
+
+    return res
+      .status(500)
+      .json({ message: "알 수 없는 에러가 발생하였습니다." });
+  }
 };
 
 export const signInCurrentUser = async (req: Request, res: Response) => {
