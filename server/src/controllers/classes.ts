@@ -69,6 +69,7 @@ export const createClass = async (req: Request, res: Response) => {
       });
     }
 
+    const userId = res.locals.user as string;
     const createdClassItem = await Class.create({
       name,
       description,
@@ -79,12 +80,16 @@ export const createClass = async (req: Request, res: Response) => {
       category,
     });
 
+    await createdClassItem.setUser(userId);
     await createdClassItem.addMedia(media);
+
     const mediaOfCreatedClass = await createdClassItem.getMedia();
+    const creator = await createdClassItem.getUser();
 
     const json = {
       ...createdClassItem.toJSON(),
       media: mediaOfCreatedClass,
+      creator,
     };
 
     return res.json(json);

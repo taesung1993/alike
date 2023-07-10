@@ -41,8 +41,8 @@ export class Class extends Model<
   declare getMedia: HasManyGetAssociationsMixin<Media>;
   declare addMedia: HasManyAddAssociationsMixin<Media, string>;
 
-  declare setCreator: BelongsToSetAssociationMixin<User, string>;
-  declare getCreator: BelongsToGetAssociationMixin<User>;
+  declare setUser: BelongsToSetAssociationMixin<User, string>;
+  declare getUser: BelongsToGetAssociationMixin<User>;
 
   static associations: {
     media: Association<Class, Media>;
