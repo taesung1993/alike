@@ -7,9 +7,12 @@ import {
   HasManyGetAssociationsMixin,
   HasManyAddAssociationsMixin,
   Association,
+  BelongsToSetAssociationMixin,
+  BelongsToGetAssociationMixin,
 } from "sequelize";
 import { sequelize } from "@config/db";
 import { Media } from "./media";
+import { User } from "./user";
 
 export interface IClass {
   id: string;
@@ -37,6 +40,9 @@ export class Class extends Model<
 
   declare getMedia: HasManyGetAssociationsMixin<Media>;
   declare addMedia: HasManyAddAssociationsMixin<Media, string>;
+
+  declare setCreator: BelongsToSetAssociationMixin<User, string>;
+  declare getCreator: BelongsToGetAssociationMixin<User>;
 
   static associations: {
     media: Association<Class, Media>;

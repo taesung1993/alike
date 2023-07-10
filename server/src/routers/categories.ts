@@ -11,7 +11,7 @@ import VALIDATORS from "@config/validators";
 
 const router = express.Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 router.get(ROUTES.GET_CATEGORIES, getCategories);
 router.get(ROUTES.GET_CATEGORY, getCategory);
 

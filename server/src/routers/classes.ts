@@ -8,10 +8,11 @@ import {
 } from "@controllers/classes";
 import ROUTES from "@config/routes";
 import VALIDATORS from "@config/validators";
+import { authMiddleware } from "@middlewares/auth.middleware";
 
 const router = express.Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 router.get(ROUTES.GET_CLASSES, getClasses);
 router.get(ROUTES.GET_CLASS, getClass);
