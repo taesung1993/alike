@@ -112,11 +112,14 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 };
 
 export const getMe = async (_: Request, res: Response) => {
-  const user = res.locals.user;
+  const userId = res.locals.user;
+  const user = await User.findByPk(userId);
+  const medium = await user?.getMedia();
 
-  delete res.locals["user"];
-
-  return res.status(RESPONSE_CODE.OK).json(user);
+  return res.status(RESPONSE_CODE.OK).json({
+    ...user?.toJSON(),
+    medium,
+  });
 };
 
 export const getIsDuplicateEmail = async (req: Request, res: Response) => {
