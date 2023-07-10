@@ -26,6 +26,9 @@ Media.belongsTo(Class, {
   constraints: false,
 });
 
+Class.belongsToMany(User, { through: "class_participants" });
+User.belongsToMany(Class, { through: "class_participants" });
+
 User.hasOne(Media, {
   foreignKey: "application",
   constraints: false,
