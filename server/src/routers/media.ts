@@ -7,10 +7,11 @@ import {
   uploadMedia,
 } from "@controllers/media";
 import ROUTES from "@config/routes";
+import { authMiddleware } from "@middlewares/auth.middleware";
 
 const router = express.Router();
 
-// router.use(authMiddleware);
+router.use(authMiddleware);
 
 router.get(ROUTES.GET_MEDIA, getMedia);
 router.get(ROUTES.GET_MEDIUM, getMedium);
