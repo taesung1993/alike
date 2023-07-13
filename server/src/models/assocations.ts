@@ -28,11 +28,12 @@ Media.belongsTo(Class, {
 
 User.hasMany(Class, {
   foreignKey: "creator",
+  as: "createdClasses",
   constraints: false,
-  as: "created_projects",
 });
 Class.belongsTo(User, {
   foreignKey: "creator",
+  constraints: false,
 });
 
 Class.belongsToMany(User, { through: "participants" });

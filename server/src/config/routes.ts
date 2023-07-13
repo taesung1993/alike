@@ -21,6 +21,7 @@ const ROUTES = {
   GET_ME: "/me",
   DELETE_USER: "/:_id",
   CHECK_DUPLICATE_EMAIL: "/check-duplicate-email",
+  CREATED_CLASSES: "/created-classes",
 };
 
 export default ROUTES;

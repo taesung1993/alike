@@ -6,6 +6,7 @@ import { BaseError } from "sequelize";
 import CustomError from "@classes/custom-error.class";
 import { validationResult } from "express-validator";
 import { RESPONSE_CODE } from "@config/errors";
+import { Class } from "@models/class";
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -151,12 +152,51 @@ export const getIsDuplicateEmail = async (req: Request, res: Response) => {
   }
 };
 
+export const getCreatedClasses = async (_: Request, res: Response) => {
+  try {
+    const id = res.locals.user;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not User",
+      });
+    }
+
+    const createdClasses = await user!.getCreatedClasses();
+
+    res.json(createdClasses);
+  } catch (error) {
+    console.error("Error creating user:", error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
 export const deleteUser = async (req: Request, res: Response) => {
   const id = req.params._id;
   try {
     const user = await User.findByPk(id);
 
-    user?.destroy({ force: true });
+    if (!user) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not User",
+      });
+    }
+
+    const createdClasses = await user.getCreatedClasses();
+    const ids = createdClasses.map((item) => item.id);
+
+    await user.destroy({ force: true });
+    await Class.destroy({ where: { id: ids } });
 
     return res.status(RESPONSE_CODE.OK).json({ message: "success" });
   } catch (error) {

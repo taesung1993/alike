@@ -2,6 +2,7 @@ import express from "express";
 import { authMiddleware } from "@middlewares/auth.middleware";
 import {
   deleteUser,
+  getCreatedClasses,
   getIsDuplicateEmail,
   getMe,
   signInCurrentUser,
@@ -28,6 +29,7 @@ router.get(
   getIsDuplicateEmail
 );
 router.get(ROUTES.GET_ME, authMiddleware, getMe);
+router.get(ROUTES.CREATED_CLASSES, authMiddleware, getCreatedClasses);
 
 router.delete(ROUTES.DELETE_USER, authMiddleware, deleteUser);
 

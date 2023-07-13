@@ -2,6 +2,8 @@ import {
   Association,
   CreationOptional,
   DataTypes,
+  HasManyGetAssociationsMixin,
+  HasManyRemoveAssociationMixin,
   HasOneGetAssociationMixin,
   HasOneSetAssociationMixin,
   InferAttributes,
@@ -10,6 +12,7 @@ import {
 } from "sequelize";
 import { sequelize } from "@config/db";
 import { Media } from "./media";
+import { Class } from "./class";
 
 export interface IUser {
   id: string;
@@ -29,6 +32,9 @@ export class User extends Model<
 
   declare setMedia: HasOneSetAssociationMixin<Media, string>;
   declare getMedia: HasOneGetAssociationMixin<Media>;
+
+  declare getCreatedClasses: HasManyGetAssociationsMixin<Class>;
+  declare removeCreatedClasses: HasManyRemoveAssociationMixin<Class, string>;
 
   static associations: {
     avatar: Association<User, Media>;
