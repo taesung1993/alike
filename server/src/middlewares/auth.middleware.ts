@@ -15,7 +15,14 @@ export const authMiddleware = async (
     const userIdFromToken = jwtService.getUserIdFromRequest(req);
     const account = await User.findByPk(userIdFromToken);
 
-    res.locals.user = account?.get("id");
+    if (!account) {
+      throw new CustomError({
+        status: RESPONSE_CODE.UNAUTHORIZED,
+        message: "Not Authorized",
+      });
+    }
+
+    res.locals.user = account.get("id");
 
     next();
   } catch (error) {
