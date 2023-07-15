@@ -4,6 +4,7 @@ import {
   deleteClass,
   getClass,
   getClasses,
+  joinClass,
   patchClass,
 } from "@controllers/classes";
 import ROUTES from "@config/routes";
@@ -18,6 +19,7 @@ router.get(ROUTES.GET_CLASSES, getClasses);
 router.get(ROUTES.GET_CLASS, getClass);
 
 router.post(ROUTES.CREATE_CLASS, VALIDATORS.CREATE_CLASS, createClass);
+router.post(ROUTES.JOIN_CLASS, joinClass);
 
 router.patch(ROUTES.PATCH_CLASS, patchClass);
 

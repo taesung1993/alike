@@ -9,6 +9,7 @@ const ROUTES = {
   CREATE_CLASS: "/",
   PATCH_CLASS: "/:_id",
   DELETE_CLASS: "/:_id",
+  JOIN_CLASS: "/:_id/join",
 
   GET_MEDIA: "/",
   GET_MEDIUM: "/:_id",

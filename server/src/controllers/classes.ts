@@ -2,6 +2,7 @@ import CustomError from "@classes/custom-error.class";
 import { RESPONSE_CODE } from "@config/errors";
 import { Class } from "@models/class";
 import { Media } from "@models/media";
+import { User } from "@models/user";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { BaseError } from "sequelize";
@@ -9,10 +10,21 @@ import { BaseError } from "sequelize";
 export const getClasses = async (_: Request, res: Response) => {
   try {
     const classes = await Class.findAll({
-      include: {
-        model: Media,
-        as: "media",
-      },
+      include: [
+        {
+          association: "media",
+        },
+        {
+          association: "participants",
+          attributes: ["id", "name"],
+          include: [
+            {
+              association: "medium",
+            },
+          ],
+          through: { attributes: [] },
+        },
+      ],
     });
 
     res.json(classes);
@@ -28,10 +40,21 @@ export const getClass = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
     const classItem = await Class.findByPk(id, {
-      include: {
-        model: Media,
-        as: "media",
-      },
+      include: [
+        {
+          association: "media",
+        },
+        {
+          association: "participants",
+          attributes: ["id", "name"],
+          include: [
+            {
+              association: "medium",
+            },
+          ],
+          through: { attributes: [] },
+        },
+      ],
     });
 
     if (!classItem) {
@@ -118,6 +141,39 @@ export const createClass = async (req: Request, res: Response) => {
   }
 };
 
+export const joinClass = async (req: Request, res: Response) => {
+  const classId = req.params._id;
+  const userId = res.locals.user;
+
+  try {
+    const foundClass = await Class.findByPk(classId);
+
+    if (!foundClass) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not class",
+      });
+    }
+
+    await foundClass.addParticipant(userId);
+    const list = await foundClass.getParticipants();
+
+    console.log("ids", list);
+
+    return res.json({ message: "hello" });
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
 export const patchClass = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
@@ -136,6 +192,10 @@ export const patchClass = async (req: Request, res: Response) => {
 
     res.json(classItem.toJSON());
   } catch (error) {
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
     res
       .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
       .json({ error: "Internal server error" });

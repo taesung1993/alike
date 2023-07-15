@@ -9,6 +9,9 @@ import {
   Association,
   BelongsToSetAssociationMixin,
   BelongsToGetAssociationMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyGetAssociationsMixin,
+  BelongsToManyRemoveAssociationMixin,
 } from "sequelize";
 import { sequelize } from "@config/db";
 import { Media } from "./media";
@@ -43,6 +46,10 @@ export class Class extends Model<
 
   declare setUser: BelongsToSetAssociationMixin<User, string>;
   declare getUser: BelongsToGetAssociationMixin<User>;
+
+  declare addParticipant: BelongsToManyAddAssociationMixin<User, string>;
+  declare getParticipants: BelongsToManyGetAssociationsMixin<User>;
+  declare removeParticipant: BelongsToManyRemoveAssociationMixin<User, string>;
 
   static associations: {
     media: Association<Class, Media>;

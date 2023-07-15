@@ -38,8 +38,8 @@ Class.belongsTo(User, {
   onDelete: "CASCADE",
 });
 
-Class.belongsToMany(User, { through: "participants" });
-User.belongsToMany(Class, { as: "joinedClasses", through: "participants" });
+Class.belongsToMany(User, { as: "participants", through: "joinedClasses" });
+User.belongsToMany(Class, { through: "joinedClasses" });
 
 Class.belongsToMany(User, { as: "likes", through: "like_classes" });
 User.belongsToMany(Class, { as: "likedClasses", through: "like_classes" });
@@ -50,7 +50,7 @@ User.hasOne(Media, {
   scope: {
     model: "user",
   },
-  as: "media",
+  as: "medium",
 });
 Media.belongsTo(User, {
   targetKey: "id",
