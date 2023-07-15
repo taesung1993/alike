@@ -11,6 +11,8 @@ const ROUTES = {
   DELETE_CLASS: "/:_id",
   JOIN_CLASS: "/:_id/join",
   WITHDRAWAL_CLASS: "/:_id/withdrawal",
+  LIKE_CLASS: "/:_id/like",
+  CANCEL_LIKE_CLASS: "/:_id/like/cancel",
 
   GET_MEDIA: "/",
   GET_MEDIUM: "/:_id",
@@ -25,6 +27,7 @@ const ROUTES = {
   CHECK_DUPLICATE_EMAIL: "/check-duplicate-email",
   CREATED_CLASSES: "/created-classes",
   JOINED_CLASSES: "/joined-classes",
+  LIKED_CLASSES: "/liked-classes",
 };
 
 export default ROUTES;
