@@ -5,6 +5,7 @@ import {
   getClass,
   getClasses,
   joinClass,
+  likeClass,
   patchClass,
   withdrawalClass,
 } from "@controllers/classes";
@@ -22,6 +23,7 @@ router.get(ROUTES.GET_CLASS, getClass);
 router.post(ROUTES.CREATE_CLASS, VALIDATORS.CREATE_CLASS, createClass);
 router.post(ROUTES.JOIN_CLASS, joinClass);
 router.post(ROUTES.WITHDRAWAL_CLASS, withdrawalClass);
+router.post(ROUTES.LIKE_CLASS, likeClass);
 
 router.patch(ROUTES.PATCH_CLASS, patchClass);
 

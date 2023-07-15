@@ -14,11 +14,18 @@ export const getClasses = async (_: Request, res: Response) => {
           association: "media",
         },
         {
+          association: "likes",
+          attributes: ["id", "name", "createdAt", "updatedAt"],
+          through: { attributes: [] },
+        },
+        {
           subQuery: true,
           association: "participants",
           attributes: [
             "id",
             "name",
+            "createdAt",
+            "updatedAt",
             [
               sequelize.literal('"participants->JoinedClass"."userType"'),
               "userType",
@@ -52,11 +59,18 @@ export const getClass = async (req: Request, res: Response) => {
           association: "media",
         },
         {
+          association: "likes",
+          attributes: ["id", "name", "createdAt", "updatedAt"],
+          through: { attributes: [] },
+        },
+        {
           subQuery: true,
           association: "participants",
           attributes: [
             "id",
             "name",
+            "createdAt",
+            "updatedAt",
             [
               sequelize.literal('"participants->JoinedClass"."userType"'),
               "userType",
@@ -124,16 +138,7 @@ export const createClass = async (req: Request, res: Response) => {
       through: { userType: "owner" },
     });
 
-    const mediaOfCreatedClass = await createdClassItem.getMedia();
-    const creator = await createdClassItem.getUser();
-
-    const json = {
-      ...createdClassItem.toJSON(),
-      media: mediaOfCreatedClass,
-      creator,
-    };
-
-    return res.json(json);
+    return res.json({ success: true });
   } catch (error) {
     if (error instanceof CustomError) {
       return res
@@ -220,6 +225,39 @@ export const withdrawalClass = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
 
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
+export const likeClass = async (req: Request, res: Response) => {
+  const userId = res.locals.user;
+  const classId = req.params._id;
+
+  try {
+    const foundClass = await Class.findByPk(classId, {
+      include: {
+        all: true,
+        nested: true,
+      },
+    });
+
+    if (!foundClass) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not class",
+      });
+    }
+
+    await foundClass.addLike(userId);
+
+    res.json({ success: true });
+  } catch (error) {
     if (error instanceof CustomError) {
       return res.status(error.status).json({ error: error.message });
     }
