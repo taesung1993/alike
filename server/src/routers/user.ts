@@ -5,6 +5,7 @@ import {
   getCreatedClasses,
   getIsDuplicateEmail,
   getJoinedClasses,
+  getLikedClasses,
   getMe,
   signInCurrentUser,
   signUpNewUser,
@@ -32,6 +33,7 @@ router.get(
 router.get(ROUTES.GET_ME, authMiddleware, getMe);
 router.get(ROUTES.CREATED_CLASSES, authMiddleware, getCreatedClasses);
 router.get(ROUTES.JOINED_CLASSES, authMiddleware, getJoinedClasses);
+router.get(ROUTES.LIKED_CLASSES, authMiddleware, getLikedClasses);
 
 router.delete(ROUTES.DELETE_USER, authMiddleware, deleteUser);
 

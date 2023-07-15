@@ -165,7 +165,38 @@ export const getCreatedClasses = async (_: Request, res: Response) => {
       });
     }
 
-    const createdClasses = await user!.getCreatedClasses();
+    const createdClasses = await user.getCreatedClasses({
+      include: [
+        {
+          association: "media",
+        },
+        {
+          association: "likes",
+          attributes: ["id", "name", "createdAt", "updatedAt"],
+          through: { attributes: [] },
+        },
+        {
+          subQuery: true,
+          association: "participants",
+          attributes: [
+            "id",
+            "name",
+            "createdAt",
+            "updatedAt",
+            [
+              sequelize.literal('"participants->JoinedClass"."userType"'),
+              "userType",
+            ],
+          ],
+          include: [
+            {
+              association: "medium",
+            },
+          ],
+          through: { attributes: [] },
+        },
+      ],
+    });
 
     res.json(createdClasses);
   } catch (error) {
@@ -200,11 +231,18 @@ export const getJoinedClasses = async (_: Request, res: Response) => {
           association: "media",
         },
         {
+          association: "likes",
+          attributes: ["id", "name", "createdAt", "updatedAt"],
+          through: { attributes: [] },
+        },
+        {
           subQuery: true,
           association: "participants",
           attributes: [
             "id",
             "name",
+            "createdAt",
+            "updatedAt",
             [
               sequelize.literal('"participants->JoinedClass"."userType"'),
               "userType",
@@ -221,6 +259,66 @@ export const getJoinedClasses = async (_: Request, res: Response) => {
     });
 
     res.json(joinedClasses);
+  } catch (error) {
+    console.error("Error creating user:", error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
+export const getLikedClasses = async (req: Request, res: Response) => {
+  try {
+    const id = res.locals.user;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not User",
+      });
+    }
+
+    const likedClasses = await user.getLikedClasses({
+      joinTableAttributes: [],
+      include: [
+        {
+          association: "media",
+        },
+        {
+          association: "likes",
+          attributes: ["id", "name", "createdAt", "updatedAt"],
+          through: { attributes: [] },
+        },
+        {
+          subQuery: true,
+          association: "participants",
+          attributes: [
+            "id",
+            "name",
+            "createdAt",
+            "updatedAt",
+            [
+              sequelize.literal('"participants->JoinedClass"."userType"'),
+              "userType",
+            ],
+          ],
+          include: [
+            {
+              association: "medium",
+            },
+          ],
+          through: { attributes: [] },
+        },
+      ],
+    });
+
+    res.json(likedClasses);
   } catch (error) {
     console.error("Error creating user:", error);
 

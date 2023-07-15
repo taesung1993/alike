@@ -38,6 +38,7 @@ export class User extends Model<
   declare removeCreatedClasses: HasManyRemoveAssociationMixin<Class, string>;
 
   declare getJoinedClasses: BelongsToManyGetAssociationsMixin<Class>;
+  declare getLikedClasses: BelongsToManyGetAssociationsMixin<Class>;
 
   static associations: {
     avatar: Association<User, Media>;
