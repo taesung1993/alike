@@ -1,5 +1,6 @@
 import {
   Association,
+  BelongsToManyGetAssociationsMixin,
   CreationOptional,
   DataTypes,
   HasManyGetAssociationsMixin,
@@ -35,6 +36,8 @@ export class User extends Model<
 
   declare getCreatedClasses: HasManyGetAssociationsMixin<Class>;
   declare removeCreatedClasses: HasManyRemoveAssociationMixin<Class, string>;
+
+  declare getJoinedClasses: BelongsToManyGetAssociationsMixin<Class>;
 
   static associations: {
     avatar: Association<User, Media>;

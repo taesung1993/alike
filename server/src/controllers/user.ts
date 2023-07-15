@@ -180,6 +180,34 @@ export const getCreatedClasses = async (_: Request, res: Response) => {
   }
 };
 
+export const getJoinedClasses = async (_: Request, res: Response) => {
+  try {
+    const id = res.locals.user;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not User",
+      });
+    }
+
+    const joinedClasses = await user.getJoinedClasses();
+
+    res.json(joinedClasses);
+  } catch (error) {
+    console.error("Error creating user:", error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
 export const deleteUser = async (req: Request, res: Response) => {
   const id = req.params._id;
   try {

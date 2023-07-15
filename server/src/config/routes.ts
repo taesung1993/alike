@@ -23,6 +23,7 @@ const ROUTES = {
   DELETE_USER: "/:_id",
   CHECK_DUPLICATE_EMAIL: "/check-duplicate-email",
   CREATED_CLASSES: "/created-classes",
+  JOINED_CLASSES: "/joined-classes",
 };
 
 export default ROUTES;

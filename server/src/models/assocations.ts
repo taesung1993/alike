@@ -43,7 +43,7 @@ Class.belongsToMany(User, {
   as: "participants",
   through: JoinedClass,
 });
-User.belongsToMany(Class, { through: JoinedClass });
+User.belongsToMany(Class, { as: "joinedClasses", through: JoinedClass });
 
 Class.belongsToMany(User, { as: "likes", through: "like_classes" });
 User.belongsToMany(Class, { as: "likedClasses", through: "like_classes" });
