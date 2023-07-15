@@ -6,6 +6,7 @@ import { BaseError } from "sequelize";
 import CustomError from "@classes/custom-error.class";
 import { validationResult } from "express-validator";
 import { RESPONSE_CODE } from "@config/errors";
+import { sequelize } from "@config/db";
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -192,7 +193,32 @@ export const getJoinedClasses = async (_: Request, res: Response) => {
       });
     }
 
-    const joinedClasses = await user.getJoinedClasses();
+    const joinedClasses = await user.getJoinedClasses({
+      joinTableAttributes: [],
+      include: [
+        {
+          association: "media",
+        },
+        {
+          subQuery: true,
+          association: "participants",
+          attributes: [
+            "id",
+            "name",
+            [
+              sequelize.literal('"participants->JoinedClass"."userType"'),
+              "userType",
+            ],
+          ],
+          include: [
+            {
+              association: "medium",
+            },
+          ],
+          through: { attributes: [] },
+        },
+      ],
+    });
 
     res.json(joinedClasses);
   } catch (error) {

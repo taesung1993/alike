@@ -10,6 +10,7 @@ const ROUTES = {
   PATCH_CLASS: "/:_id",
   DELETE_CLASS: "/:_id",
   JOIN_CLASS: "/:_id/join",
+  WITHDRAWAL_CLASS: "/:_id/withdrawal",
 
   GET_MEDIA: "/",
   GET_MEDIUM: "/:_id",

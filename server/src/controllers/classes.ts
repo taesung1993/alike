@@ -191,6 +191,45 @@ export const joinClass = async (req: Request, res: Response) => {
   }
 };
 
+export const withdrawalClass = async (req: Request, res: Response) => {
+  const classId = req.params._id;
+  const userId = res.locals.user;
+
+  try {
+    const foundClass = await Class.findByPk(classId);
+
+    if (!foundClass) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not class",
+      });
+    }
+
+    const creator = foundClass.get("creator") as string;
+
+    if (userId === creator) {
+      throw new CustomError({
+        status: RESPONSE_CODE.FORBIDDEN,
+        message: "The owner can't withdrawal",
+      });
+    }
+
+    await foundClass.removeParticipant(userId);
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
 export const patchClass = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
