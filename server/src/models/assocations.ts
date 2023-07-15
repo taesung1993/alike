@@ -30,10 +30,12 @@ User.hasMany(Class, {
   foreignKey: "creator",
   as: "createdClasses",
   constraints: false,
+  onDelete: "CASCADE",
 });
 Class.belongsTo(User, {
   foreignKey: "creator",
   constraints: false,
+  onDelete: "CASCADE",
 });
 
 Class.belongsToMany(User, { through: "participants" });

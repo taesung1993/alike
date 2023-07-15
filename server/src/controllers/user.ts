@@ -6,7 +6,6 @@ import { BaseError } from "sequelize";
 import CustomError from "@classes/custom-error.class";
 import { validationResult } from "express-validator";
 import { RESPONSE_CODE } from "@config/errors";
-import { Class } from "@models/class";
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -192,12 +191,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       });
     }
 
-    const createdClasses = await user.getCreatedClasses();
-    const ids = createdClasses.map((item) => item.id);
-
     await user.destroy({ force: true });
-    await Class.destroy({ where: { id: ids } });
-
     return res.status(RESPONSE_CODE.OK).json({ message: "success" });
   } catch (error) {
     if (error instanceof BaseError) {
