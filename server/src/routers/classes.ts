@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  cancelToLikeClass,
   createClass,
   deleteClass,
   getClass,
@@ -24,6 +25,7 @@ router.post(ROUTES.CREATE_CLASS, VALIDATORS.CREATE_CLASS, createClass);
 router.post(ROUTES.JOIN_CLASS, joinClass);
 router.post(ROUTES.WITHDRAWAL_CLASS, withdrawalClass);
 router.post(ROUTES.LIKE_CLASS, likeClass);
+router.post(ROUTES.CANCEL_LIKE_CLASS, cancelToLikeClass);
 
 router.patch(ROUTES.PATCH_CLASS, patchClass);
 

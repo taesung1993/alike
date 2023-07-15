@@ -268,6 +268,48 @@ export const likeClass = async (req: Request, res: Response) => {
   }
 };
 
+export const cancelToLikeClass = async (req: Request, res: Response) => {
+  const userId = res.locals.user;
+  const classId = req.params._id;
+
+  try {
+    const foundClass = await Class.findByPk(classId, {
+      include: {
+        all: true,
+        nested: true,
+      },
+    });
+
+    if (!foundClass) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not class",
+      });
+    }
+
+    const foundLikedUser = await foundClass.hasLike(userId);
+
+    if (!foundLikedUser) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not Found Liked user",
+      });
+    }
+
+    await foundClass.removeLike(userId);
+
+    res.json({ success: true });
+  } catch (error) {
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal server error" });
+  }
+};
+
 export const patchClass = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;

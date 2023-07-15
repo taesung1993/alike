@@ -13,6 +13,7 @@ import {
   BelongsToManyGetAssociationsMixin,
   BelongsToManyRemoveAssociationMixin,
   BelongsToManyAddAssociationsMixin,
+  BelongsToManyHasAssociationMixin,
 } from "sequelize";
 import { sequelize } from "@config/db";
 import { Media } from "./media";
@@ -55,6 +56,7 @@ export class Class extends Model<
   declare addLike: BelongsToManyAddAssociationsMixin<User, string>;
   declare removeLike: BelongsToManyRemoveAssociationMixin<User, string>;
   declare getLikes: BelongsToManyGetAssociationsMixin<User>;
+  declare hasLike: BelongsToManyHasAssociationMixin<User, string>;
 
   static associations: {
     media: Association<Class, Media>;
