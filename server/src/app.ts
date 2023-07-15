@@ -7,7 +7,7 @@ import "@models/assocations";
 const app: Express = express();
 export const initServer = async (port: number) => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     app.listen(port, () => {
       console.log(`[server]: Server is running at ${port}`);
     });

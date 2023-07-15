@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "@models/user";
 import jwtService from "@services/jwt.service";
-import { BaseError } from "sequelize";
+import { BaseError, Op } from "sequelize";
 import CustomError from "@classes/custom-error.class";
 import { validationResult } from "express-validator";
 import { RESPONSE_CODE } from "@config/errors";
@@ -226,6 +226,11 @@ export const getJoinedClasses = async (_: Request, res: Response) => {
 
     const joinedClasses = await user.getJoinedClasses({
       joinTableAttributes: [],
+      where: {
+        creator: {
+          [Op.ne]: id,
+        },
+      },
       include: [
         {
           association: "media",
