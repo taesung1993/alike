@@ -1,6 +1,7 @@
 import { Category } from "./category";
 import { Class } from "./class";
 import { JoinedClass } from "./joinedClass";
+import { LikedClass } from "./likedClass";
 import { Media } from "./media";
 import { User } from "./user";
 
@@ -45,8 +46,8 @@ Class.belongsToMany(User, {
 });
 User.belongsToMany(Class, { as: "joinedClasses", through: JoinedClass });
 
-Class.belongsToMany(User, { as: "likes", through: "like_classes" });
-User.belongsToMany(Class, { as: "likedClasses", through: "like_classes" });
+Class.belongsToMany(User, { as: "likes", through: LikedClass });
+User.belongsToMany(Class, { as: "likedClasses", through: LikedClass });
 
 User.hasOne(Media, {
   foreignKey: "application",
