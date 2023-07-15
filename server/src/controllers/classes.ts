@@ -1,8 +1,7 @@
 import CustomError from "@classes/custom-error.class";
+import { sequelize } from "@config/db";
 import { RESPONSE_CODE } from "@config/errors";
 import { Class } from "@models/class";
-import { Media } from "@models/media";
-import { User } from "@models/user";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { BaseError } from "sequelize";
@@ -15,8 +14,16 @@ export const getClasses = async (_: Request, res: Response) => {
           association: "media",
         },
         {
+          subQuery: true,
           association: "participants",
-          attributes: ["id", "name"],
+          attributes: [
+            "id",
+            "name",
+            [
+              sequelize.literal('"participants->JoinedClass"."userType"'),
+              "userType",
+            ],
+          ],
           include: [
             {
               association: "medium",
@@ -45,8 +52,16 @@ export const getClass = async (req: Request, res: Response) => {
           association: "media",
         },
         {
+          subQuery: true,
           association: "participants",
-          attributes: ["id", "name"],
+          attributes: [
+            "id",
+            "name",
+            [
+              sequelize.literal('"participants->JoinedClass"."userType"'),
+              "userType",
+            ],
+          ],
           include: [
             {
               association: "medium",
@@ -105,6 +120,9 @@ export const createClass = async (req: Request, res: Response) => {
 
     await createdClassItem.setUser(userId);
     await createdClassItem.addMedia(media);
+    await createdClassItem.addParticipant(userId, {
+      through: { userType: "owner" },
+    });
 
     const mediaOfCreatedClass = await createdClassItem.getMedia();
     const creator = await createdClassItem.getUser();
@@ -155,12 +173,11 @@ export const joinClass = async (req: Request, res: Response) => {
       });
     }
 
-    await foundClass.addParticipant(userId);
-    const list = await foundClass.getParticipants();
+    await foundClass.addParticipant(userId, {
+      through: { userType: "viewer" },
+    });
 
-    console.log("ids", list);
-
-    return res.json({ message: "hello" });
+    return res.json({ success: true });
   } catch (error) {
     console.log(error);
 

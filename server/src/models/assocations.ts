@@ -1,5 +1,6 @@
 import { Category } from "./category";
 import { Class } from "./class";
+import { JoinedClass } from "./joinedClass";
 import { Media } from "./media";
 import { User } from "./user";
 
@@ -38,8 +39,11 @@ Class.belongsTo(User, {
   onDelete: "CASCADE",
 });
 
-Class.belongsToMany(User, { as: "participants", through: "joinedClasses" });
-User.belongsToMany(Class, { through: "joinedClasses" });
+Class.belongsToMany(User, {
+  as: "participants",
+  through: JoinedClass,
+});
+User.belongsToMany(Class, { through: JoinedClass });
 
 Class.belongsToMany(User, { as: "likes", through: "like_classes" });
 User.belongsToMany(Class, { as: "likedClasses", through: "like_classes" });
