@@ -8,6 +8,13 @@ import { validationResult } from "express-validator";
 import { RESPONSE_CODE } from "@config/errors";
 import { sequelize } from "@config/db";
 import { transporter } from "@config/mailer";
+import Mail from "nodemailer/lib/mailer";
+import path from "path";
+
+type ExtendedOptions = Mail.Options & {
+  template: string;
+  context: Record<string, unknown>;
+};
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -73,15 +80,29 @@ export const signInCurrentUser = async (req: Request, res: Response) => {
 
 export const requestVerificationEmail = async (req: Request, res: Response) => {
   try {
-    await transporter.sendMail({
-      from: '"Alike" <alike@example.com>', // sender address
-      to: "cheonyulin@gmail.com", // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello world?", // plain text body
-      html: "<b>Hello world?</b>", // html body
-    });
+    const options: ExtendedOptions = {
+      from: '"Alike" <alike@example.com>',
+      to: "cheonyulin@naver.com",
+      subject: `[Alike] 이메일 계정을 인증해주세요 ('cheonyulin@gmail.com')`,
+      template: "verification-email",
+      attachments: [
+        {
+          filename: "alike_logo.png",
+          path: path.join(__dirname, "../static/images/alike_logo.png"),
+          cid: "alike_logo",
+        },
+      ],
+      context: {
+        name: "윤태성",
+      },
+    };
+
+    await transporter.sendMail(options);
+
     res.json({ success: true });
   } catch (error) {
+    console.log(error);
+
     return res
       .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
       .json({ message: "알 수 없는 에러가 발생하였습니다." });
