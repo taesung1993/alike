@@ -7,6 +7,7 @@ import {
   getJoinedClasses,
   getLikedClasses,
   getMe,
+  requestVerificationEmail,
   signInCurrentUser,
   signUpNewUser,
   uploadAvatar,
@@ -18,6 +19,7 @@ const router = express.Router();
 
 router.post(ROUTES.SIGN_UP, signUpNewUser);
 router.post(ROUTES.SIGN_IN, signInCurrentUser);
+router.post(ROUTES.VERIFICATION_EMAIL, requestVerificationEmail);
 router.post(
   ROUTES.UPLOAD_AVATAR,
   authMiddleware,

@@ -7,6 +7,7 @@ import CustomError from "@classes/custom-error.class";
 import { validationResult } from "express-validator";
 import { RESPONSE_CODE } from "@config/errors";
 import { sequelize } from "@config/db";
+import { transporter } from "@config/mailer";
 
 export const signUpNewUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -68,6 +69,23 @@ export const signInCurrentUser = async (req: Request, res: Response) => {
   return res
     .status(RESPONSE_CODE.UNAUTHORIZED)
     .json({ error: "Authentication failed" });
+};
+
+export const requestVerificationEmail = async (req: Request, res: Response) => {
+  try {
+    await transporter.sendMail({
+      from: '"Alike" <alike@example.com>', // sender address
+      to: "cheonyulin@gmail.com", // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // html body
+    });
+    res.json({ success: true });
+  } catch (error) {
+    return res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: "알 수 없는 에러가 발생하였습니다." });
+  }
 };
 
 export const uploadAvatar = async (req: Request, res: Response) => {
