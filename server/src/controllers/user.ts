@@ -91,9 +91,14 @@ export const requestVerificationEmail = async (req: Request, res: Response) => {
           path: path.join(__dirname, "../static/images/alike_logo.png"),
           cid: "alike_logo",
         },
+        {
+          filename: "mailer.jpg",
+          path: path.join(__dirname, "../static/images/mailer.jpg"),
+          cid: "mailer",
+        },
       ],
       context: {
-        name: "윤태성",
+        code: [1, 2, 3, 4, 5, 6],
       },
     };
 

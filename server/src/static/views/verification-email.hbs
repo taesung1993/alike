@@ -1,10 +1,83 @@
 <html>
   <head>
     <title>My Email Template</title>
+    <style type="text/css">
+      p { margin: 0; color: #26262C;}
+    </style>
   </head>
   <body>
-    <h1>Hello {{name}}!</h1>
-    <p>Welcome to our newsletter.</p>
-    <img src="cid:alike_logo" alt="alike_logo" width="120" />
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td align="center" bgcolor="#EAF0F3" style="padding: 30px 0;">
+          <table border="0" cellpadding="0" cellspacing="0" width="600">
+            <tr>
+              <td align="left" style="padding: 20px" bgcolor="#fff">
+                <img src="cid:alike_logo" alt="alike_logo" />
+              </td>
+            </tr>
+
+            <tr>
+              <td bgcolor="#fff" align="center">
+                <img src="cid:mailer" alt="mailer" width="250" />
+              </td>
+            </tr>
+
+            <tr>
+              <td bgcolor="#fff" align="center">
+                <p style="font-size: 20px; font-weight: bold">
+                  이메일 인증번호:
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td bgcolor="#fff" align="center" style="padding-top: 4px;">
+                <table border="0" cellpadding="0" cellspacing="8">
+                  <tr>
+                    {{#each code}}
+                      <td
+                        style="
+                        width: 32px;
+                        height: 32px;
+                        vertical-align: middle;
+                        border-radius: 8px;
+                      "
+                        bgcolor="#EAF0F3"
+                        align="center"
+                      >
+                        <p style="font-size: 16px; font-weight: 500;">
+                          {{this}}
+                        </p>
+                      </td>
+                    {{/each}}
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                bgcolor="#fff"
+                align="center"
+                style="padding-top: 8px; padding-bottom: 60px"
+              >
+                <p style="font-size: 12px">회원가입을 위한 인증번호 입니다.</p>
+                <p style="font-size: 12px">
+                  위 인증번호를 입력하여 인증을 완료해주세요.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td bgcolor="#fff" style="padding: 20px" align="center">
+                <hr />
+                <p style="font-size: 12px">본 메일은 발신전용 메일입니다.</p>
+                <p style="font-size: 12px">&copy; 2023 Alike</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
