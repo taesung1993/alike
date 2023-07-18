@@ -28,7 +28,8 @@ const ROUTES = {
   CREATED_CLASSES: "/created-classes",
   JOINED_CLASSES: "/joined-classes",
   LIKED_CLASSES: "/liked-classes",
-  VERIFICATION_EMAIL: "/verification-email",
+  SEND_VERIFICATION_EMAIL: "/send/verification-email",
+  VERIFY_EMAIL: "/verify/email",
 };
 
 export default ROUTES;

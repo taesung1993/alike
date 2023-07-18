@@ -10,6 +10,8 @@ import { sequelize } from "@config/db";
 import { transporter } from "@config/mailer";
 import Mail from "nodemailer/lib/mailer";
 import path from "path";
+import helperService from "@services/helper.service";
+import { redis } from "@config/redis";
 
 type ExtendedOptions = Mail.Options & {
   template: string;
@@ -78,12 +80,26 @@ export const signInCurrentUser = async (req: Request, res: Response) => {
     .json({ error: "Authentication failed" });
 };
 
-export const requestVerificationEmail = async (req: Request, res: Response) => {
+export const sendVerificationEmail = async (req: Request, res: Response) => {
   try {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      throw new CustomError({
+        status: RESPONSE_CODE.BAD_REQUEST,
+        message: result.array()[0].msg,
+      });
+    }
+
+    const verificationNumber =
+      helperService.generateRandomNumberForVeirification();
+    const LIMIT_TIME = 180; // 3 minute
+    const email = req.body.email;
+
     const options: ExtendedOptions = {
       from: '"Alike" <alike@example.com>',
-      to: "cheonyulin@naver.com",
-      subject: `[Alike] 이메일 계정을 인증해주세요 ('cheonyulin@gmail.com')`,
+      to: email,
+      subject: `[Alike] 이메일 계정을 인증해주세요 ('${email}')`,
       template: "verification-email",
       attachments: [
         {
@@ -98,15 +114,63 @@ export const requestVerificationEmail = async (req: Request, res: Response) => {
         },
       ],
       context: {
-        code: [1, 2, 3, 4, 5, 6],
+        code: verificationNumber.split(""),
       },
     };
 
     await transporter.sendMail(options);
+    await redis.setEx(email, LIMIT_TIME, verificationNumber);
 
     res.json({ success: true });
   } catch (error) {
     console.log(error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ message: error.message });
+    }
+
+    return res
+      .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+      .json({ message: "알 수 없는 에러가 발생하였습니다." });
+  }
+};
+
+export const verifyEmail = async (req: Request, res: Response) => {
+  try {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      throw new CustomError({
+        status: RESPONSE_CODE.BAD_REQUEST,
+        message: result.array()[0].msg,
+      });
+    }
+
+    const { email, code } = req.body;
+    const value = await redis.get(email);
+    const isSame = code === value;
+
+    if (!value) {
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not found the verification code because of timeout",
+      });
+    }
+
+    if (!isSame) {
+      throw new CustomError({
+        status: RESPONSE_CODE.BAD_REQUEST,
+        message: "The verification numbers don't match.",
+      });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ message: error.message });
+    }
 
     return res
       .status(RESPONSE_CODE.INTERNAL_SERVER_ERROR)

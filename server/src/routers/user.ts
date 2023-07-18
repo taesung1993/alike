@@ -7,10 +7,11 @@ import {
   getJoinedClasses,
   getLikedClasses,
   getMe,
-  requestVerificationEmail,
+  sendVerificationEmail,
   signInCurrentUser,
   signUpNewUser,
   uploadAvatar,
+  verifyEmail,
 } from "@controllers/user";
 import ROUTES from "@config/routes";
 import VALIDATORS from "@config/validators";
@@ -19,7 +20,14 @@ const router = express.Router();
 
 router.post(ROUTES.SIGN_UP, signUpNewUser);
 router.post(ROUTES.SIGN_IN, signInCurrentUser);
-router.post(ROUTES.VERIFICATION_EMAIL, requestVerificationEmail);
+
+router.post(
+  ROUTES.SEND_VERIFICATION_EMAIL,
+  VALIDATORS.SEND_VERIFICATION_EMAIL,
+  sendVerificationEmail
+);
+router.post(ROUTES.VERIFY_EMAIL, VALIDATORS.VERIFY_EMAIL, verifyEmail);
+
 router.post(
   ROUTES.UPLOAD_AVATAR,
   authMiddleware,

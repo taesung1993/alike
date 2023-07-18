@@ -52,6 +52,31 @@ const VALIDATORS = {
       .notEmpty()
       .withMessage("'email'(query) is empty or missing"),
   ],
+
+  SEND_VERIFICATION_EMAIL: [
+    body("email")
+      .trim()
+      .notEmpty()
+      .withMessage("'email'(body) is empty or missing"),
+
+    body("email")
+      .trim()
+      .isEmail()
+      .withMessage("'email'(body) is not email format"),
+  ],
+
+  VERIFY_EMAIL: [
+    body("email")
+      .trim()
+      .notEmpty()
+      .isEmail()
+      .withMessage("'email'(body) is empty or missing"),
+    body("code")
+      .trim()
+      .notEmpty()
+      .isNumeric()
+      .withMessage("'code'(body) is empty or missing"),
+  ],
 };
 
 export default VALIDATORS;
