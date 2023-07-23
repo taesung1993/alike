@@ -16,6 +16,8 @@ router.use(authMiddleware);
 
 swagger.addPathAndOperation(SWAGGER_PATHS["GET_CATEGORIES"]);
 router.get(ROUTES.GET_CATEGORIES, getCategories);
+
+swagger.addPathAndOperation(SWAGGER_PATHS["GET_CATEGORY"]);
 router.get(ROUTES.GET_CATEGORY, getCategory);
 
 router.post(ROUTES.CREATE_CATEGORY, VALIDATORS.CREATE_CATEGORY, createCategory);
