@@ -9,7 +9,7 @@ export const GET_CATEGORIES = {
     description: "생성했던 카테고리를 리스트 형태로 불러옵니다.",
     responses: {
       [RESPONSE_CODE.OK]: {
-        description: "카티고리 생성 완료",
+        description: "카티고리 리스트 불러오기 완료",
         content: {
           "application/json": {
             schema: {
