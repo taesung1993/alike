@@ -14,24 +14,14 @@ const definition = {
     },
   ],
   swaggerSchemes: ["http", "https"],
-  securityDefinitions: {
-    ApiKeyAuth: {
-      type: "apiKey",
-      name: "Authorization",
-      in: "header",
-    },
-  },
-
   produces: ["application/json"],
   components: {
     securitySchemes: {
-      bearerAuth: {
+      Authorization: {
         type: "http",
         scheme: "bearer",
-        bearerFormat: "Token",
-        name: "Authorization",
-        description: "인증 토큰 값을 넣어주세요.",
-        in: "header",
+        bearerFormat: "JWT",
+        value: "Bearer <JWT token here>",
       },
     },
     schemas: {
