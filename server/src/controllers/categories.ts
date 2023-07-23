@@ -65,7 +65,7 @@ export const getCategories = async (_: Request, res: Response) => {
         include: [
           [
             sequelize.literal(
-              '(SELECT COUNT(*) FROM "class" WHERE "class"."categoryId" = "Category"."id")::integer'
+              '(SELECT COUNT(*) FROM "class" WHERE "class"."category" = "Category"."id")::integer'
             ),
             "classCount",
           ],
