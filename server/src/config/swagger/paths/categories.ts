@@ -63,6 +63,23 @@ export const GET_CATEGORY = {
           },
         },
       },
+
+      [RESPONSE_CODE.NOT_FOUND]: {
+        description: "카테고리가 존재하지 않음",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                message: {
+                  type: "string",
+                  example: "Not category",
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
 };
@@ -150,6 +167,7 @@ export const DELETE_CATEGORY = {
           },
         },
       },
+
       [RESPONSE_CODE.NOT_FOUND]: {
         description: "카테고리가 존재하지 않음",
         content: {

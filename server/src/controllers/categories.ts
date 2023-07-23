@@ -47,7 +47,10 @@ export const getCategory = async (req: Request, res: Response) => {
     const category = await Category.findByPk(pk);
 
     if (!category) {
-      return res.json(null);
+      throw new CustomError({
+        status: RESPONSE_CODE.NOT_FOUND,
+        message: "Not category",
+      });
     }
 
     const classCount = await category.countClasses();
@@ -58,6 +61,10 @@ export const getCategory = async (req: Request, res: Response) => {
 
     return res.json(json);
   } catch (error: any) {
+    if (error instanceof CustomError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
     const status = error?.status || RESPONSE_CODE.BAD_REQUEST;
     const message = error?.message || "Internal server error";
 
