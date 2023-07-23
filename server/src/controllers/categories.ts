@@ -22,7 +22,14 @@ export const createCategory = async (
 
     const { name } = req.body;
     const category = await Category.create({ name });
-    res.json(category);
+    const classCount = await category.countClasses();
+
+    const json = {
+      ...category.toJSON(),
+      classCount,
+    };
+
+    res.json(json);
   } catch (error) {
     if (error instanceof CustomError) {
       return res.status(error.status).json({ error: error.message });
@@ -43,10 +50,10 @@ export const getCategory = async (req: Request, res: Response) => {
       return res.json(null);
     }
 
-    const classes = await category.getClasses();
+    const classCount = await category.countClasses();
     const json = {
       ...category.toJSON(),
-      classCount: classes.length,
+      classCount,
     };
 
     return res.json(json);

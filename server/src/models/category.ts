@@ -1,6 +1,7 @@
 import {
   CreationOptional,
   DataTypes,
+  HasManyCountAssociationsMixin,
   HasManyGetAssociationsMixin,
   InferAttributes,
   InferCreationAttributes,
@@ -22,6 +23,7 @@ export class Category extends Model<
   declare name: string;
 
   declare getClasses: HasManyGetAssociationsMixin<Class>;
+  declare countClasses: HasManyCountAssociationsMixin;
 }
 
 Category.init(
