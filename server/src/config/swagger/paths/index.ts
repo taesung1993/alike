@@ -1,6 +1,7 @@
-import { GET_CATEGORIES, GET_CATEGORY } from "./categories";
+import { GET_CATEGORIES, GET_CATEGORY, CREATE_CATEGORY } from "./categories";
 
 export const PATHS = {
   GET_CATEGORIES,
   GET_CATEGORY,
+  CREATE_CATEGORY,
 };

@@ -20,6 +20,7 @@ router.get(ROUTES.GET_CATEGORIES, getCategories);
 swagger.addPathAndOperation(SWAGGER_PATHS["GET_CATEGORY"]);
 router.get(ROUTES.GET_CATEGORY, getCategory);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["CREATE_CATEGORY"]);
 router.post(ROUTES.CREATE_CATEGORY, VALIDATORS.CREATE_CATEGORY, createCategory);
 
 router.delete(ROUTES.DELETE_CATEGORY, deleteCategory);

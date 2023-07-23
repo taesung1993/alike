@@ -66,3 +66,48 @@ export const GET_CATEGORY = {
     },
   },
 };
+
+export const CREATE_CATEGORY = {
+  METHOD: "post",
+  ROUTE: "/categories",
+  OPERATION: {
+    tags: ["Category"],
+    summary: "카테고리 생성하기",
+    description: "새로운 카테고리를 생성합니다.",
+    security: [
+      {
+        Authorization: [],
+      },
+    ],
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            required: ["name"],
+            properties: {
+              name: {
+                type: "string",
+                description: "카테고리 이름",
+                example: "Next.js",
+              },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      [RESPONSE_CODE.OK]: {
+        description: "카테고리 생성 완료",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              $ref: "#/components/schemas/category",
+            },
+          },
+        },
+      },
+    },
+  },
+};
