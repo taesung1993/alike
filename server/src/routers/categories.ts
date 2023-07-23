@@ -8,10 +8,13 @@ import {
 } from "@controllers/categories";
 import ROUTES from "@config/routes";
 import VALIDATORS from "@config/validators";
+import { SWAGGER_PATHS, swagger } from "@config/swagger";
 
 const router = express.Router();
 
 router.use(authMiddleware);
+
+swagger.addPathAndOperation(SWAGGER_PATHS["GET_CATEGORIES"]);
 router.get(ROUTES.GET_CATEGORIES, getCategories);
 router.get(ROUTES.GET_CATEGORY, getCategory);
 
