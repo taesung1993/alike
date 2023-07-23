@@ -111,3 +111,61 @@ export const CREATE_CATEGORY = {
     },
   },
 };
+
+export const DELETE_CATEGORY = {
+  METHOD: "delete",
+  ROUTE: "/categories/{_id}",
+  OPERATION: {
+    tags: ["Category"],
+    summary: "카테고리 삭제",
+    description: "생성했던 카테고리를 삭제합니다.",
+    security: [
+      {
+        Authorization: [],
+      },
+    ],
+    parameters: [
+      {
+        in: "path",
+        type: "number",
+        required: true,
+        name: "_id",
+        description: "카테고리 아이디",
+      },
+    ],
+    responses: {
+      [RESPONSE_CODE.OK]: {
+        description: "카테고리 삭제 완료",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                success: {
+                  type: "boolean",
+                  description: "요청 성공 여부",
+                },
+              },
+            },
+          },
+        },
+      },
+      [RESPONSE_CODE.NOT_FOUND]: {
+        description: "카테고리가 존재하지 않음",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                message: {
+                  type: "string",
+                  example: "Not category",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
