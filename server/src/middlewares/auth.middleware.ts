@@ -13,6 +13,7 @@ export const authMiddleware = async (
 ) => {
   try {
     const userIdFromToken = jwtService.getUserIdFromRequest(req);
+
     const account = await User.findByPk(userIdFromToken);
 
     if (!account) {
