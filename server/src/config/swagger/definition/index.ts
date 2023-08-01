@@ -1,4 +1,4 @@
-import { category } from "../schemas";
+import { category, medium } from "../schemas";
 
 const definition = {
   openapi: "3.1.0",
@@ -26,6 +26,7 @@ const definition = {
     },
     schemas: {
       category,
+      medium
     },
   },
 
@@ -34,6 +35,10 @@ const definition = {
       name: "Category",
       description: "카테고리 API",
     },
+    {
+      name: 'Media',
+      description: '미디어 API'
+    }
   ],
 
   paths: {},
