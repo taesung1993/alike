@@ -44,6 +44,7 @@ export const getMedium = async (req: Request, res: Response) => {
 export const uploadMedia = async (req: Request, res: Response) => {
   const files = req.files as Express.Multer.File[];
   const length = files.length;
+
   let data: any = null;
 
   if (files) {
