@@ -1,49 +1,92 @@
 import { RESPONSE_CODE } from "@config/errors";
 
 export const UPLOAD_MEDIA = {
-  METHOD: 'post',
-  ROUTE: '/media',
+  METHOD: "post",
+  ROUTE: "/media",
   OPERATION: {
-    tags: ['Media'],
-    summary: '사진을 업로드',
-    description: '사진을 새로 업로드합니다.',
+    tags: ["Media"],
+    summary: "사진을 업로드",
+    description: "사진을 새로 업로드합니다.",
     security: [
       {
-        Authorization: []
-      }
+        Authorization: [],
+      },
     ],
     requestBody: {
       required: true,
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           schema: {
             type: "object",
-            required: ['files'],
+            required: ["files"],
             properties: {
               files: {
-                type: 'array',
+                type: "array",
                 items: {
-                  type: 'string',
-                  format: 'binary'
-                }
-              }
-            }
-          }
-        }
-      }
+                  type: "string",
+                  format: "binary",
+                },
+              },
+            },
+          },
+        },
+      },
     },
     responses: {
       [RESPONSE_CODE.OK]: {
-        description: '업로드 완료',
+        description: "업로드 완료",
         content: {
-           "application/json": {
+          "application/json": {
             schema: {
               type: "object",
-              $ref: "#/components/schemas/medium"
-            }
-           }
-        }
-      }
-    }
-  }
-}
+              $ref: "#/components/schemas/medium",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const DELETE_MEDIA = {
+  METHOD: "delete",
+  ROUTE: "/media/{_id}",
+  OPERATION: {
+    tags: ["Media"],
+    summary: "사진 삭제",
+    description: "업로드한 사진을 삭제합니다.",
+    security: [
+      {
+        Authorization: [],
+      },
+    ],
+    parameters: [
+      {
+        in: "path",
+        type: "string",
+        required: true,
+        name: "_id",
+        description: "사진 아이디",
+      },
+    ],
+    responses: {
+      [RESPONSE_CODE.OK]: {
+        description: "삭제 완료",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                message: {
+                  type: "string",
+                  description: "삭제 성공 여부",
+                  example: "success",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};

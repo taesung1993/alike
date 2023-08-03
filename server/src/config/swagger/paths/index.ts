@@ -5,7 +5,7 @@ import {
   DELETE_CATEGORY,
 } from "./categories";
 
-import {UPLOAD_MEDIA} from './media';
+import { UPLOAD_MEDIA, DELETE_MEDIA } from "./media";
 
 export const PATHS = {
   GET_CATEGORIES,
@@ -13,5 +13,6 @@ export const PATHS = {
   CREATE_CATEGORY,
   DELETE_CATEGORY,
 
-  UPLOAD_MEDIA
+  UPLOAD_MEDIA,
+  DELETE_MEDIA,
 };

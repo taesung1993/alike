@@ -17,9 +17,10 @@ router.use(authMiddleware);
 router.get(ROUTES.GET_MEDIA, getMedia);
 router.get(ROUTES.GET_MEDIUM, getMedium);
 
-swagger.addPathAndOperation(SWAGGER_PATHS['UPLOAD_MEDIA']);
+swagger.addPathAndOperation(SWAGGER_PATHS["UPLOAD_MEDIA"]);
 router.post(ROUTES.UPLOAD_MEDIA, multipleMediaMulter, uploadMedia);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["DELETE_MEDIA"]);
 router.delete(ROUTES.DELETE_MEDIUM, deleteMedia);
 
 export default router;
