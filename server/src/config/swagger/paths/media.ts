@@ -1,5 +1,72 @@
 import { RESPONSE_CODE } from "@config/errors";
 
+export const GET_MEDIA = {
+  METHOD: "get",
+  ROUTE: "/media",
+  OPERATION: {
+    tags: ["Media"],
+    summary: "사진 리스트 불러오기",
+    description: "생성했던 사진을 리스트 형태로 불러옵니다.",
+    security: [
+      {
+        Authorization: [],
+      },
+    ],
+    responses: {
+      [RESPONSE_CODE.OK]: {
+        description: "사진 리스트 불러오기 완료",
+        content: {
+          "application/json": {
+            schema: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/medium",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const GET_MEDIUM = {
+  METHOD: "get",
+  ROUTE: "/media/{_id}",
+  OPERATION: {
+    tags: ["Media"],
+    summary: "사진 불러오기",
+    description: "생성했던 사진을 불러옵니다.",
+    security: [
+      {
+        Authorization: [],
+      },
+    ],
+    parameters: [
+      {
+        in: "path",
+        type: "string",
+        required: true,
+        name: "_id",
+        description: "사진 아이디",
+      },
+    ],
+    responses: {
+      [RESPONSE_CODE.OK]: {
+        description: "사진 불러오기 완료",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              $ref: "#/components/schemas/medium",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 export const UPLOAD_MEDIA = {
   METHOD: "post",
   ROUTE: "/media",
@@ -38,8 +105,10 @@ export const UPLOAD_MEDIA = {
         content: {
           "application/json": {
             schema: {
-              type: "object",
-              $ref: "#/components/schemas/medium",
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/medium",
+              },
             },
           },
         },

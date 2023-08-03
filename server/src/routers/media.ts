@@ -14,7 +14,10 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["GET_MEDIA"]);
 router.get(ROUTES.GET_MEDIA, getMedia);
+
+swagger.addPathAndOperation(SWAGGER_PATHS["GET_MEDIUM"]);
 router.get(ROUTES.GET_MEDIUM, getMedium);
 
 swagger.addPathAndOperation(SWAGGER_PATHS["UPLOAD_MEDIA"]);
