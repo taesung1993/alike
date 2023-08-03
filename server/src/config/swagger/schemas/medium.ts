@@ -14,8 +14,8 @@ const medium = {
       description: "업로드한 이미지 이름",
     },
     type: {
-      type: 'string',
-      description: "업로드한 이미지 타입"
+      type: "string",
+      description: "업로드한 이미지 타입",
     },
     updatedAt: {
       type: "string",
@@ -24,6 +24,16 @@ const medium = {
     createdAt: {
       type: "string",
       description: "생성 날짜",
+    },
+    application: {
+      type: "string",
+      nullable: true,
+      description: "연결되어 있는 어플리케이션 아이디",
+    },
+    model: {
+      type: "string",
+      nullable: true,
+      description: "연결되어 있는 어플리케이션 타입",
     },
   },
 };
