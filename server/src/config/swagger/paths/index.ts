@@ -7,6 +7,8 @@ import {
 
 import { GET_MEDIA, GET_MEDIUM, UPLOAD_MEDIA, DELETE_MEDIA } from "./media";
 
+import { SIGN_UP } from "./user";
+
 export const PATHS = {
   GET_CATEGORIES,
   GET_CATEGORY,
@@ -17,4 +19,6 @@ export const PATHS = {
   GET_MEDIUM,
   UPLOAD_MEDIA,
   DELETE_MEDIA,
+
+  SIGN_UP,
 };

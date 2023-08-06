@@ -15,9 +15,11 @@ import {
 } from "@controllers/user";
 import ROUTES from "@config/routes";
 import VALIDATORS from "@config/validators";
+import { SWAGGER_PATHS, swagger } from "@config/swagger";
 
 const router = express.Router();
 
+swagger.addPathAndOperation(SWAGGER_PATHS["SIGN_UP"]);
 router.post(ROUTES.SIGN_UP, signUpNewUser);
 router.post(ROUTES.SIGN_IN, signInCurrentUser);
 
