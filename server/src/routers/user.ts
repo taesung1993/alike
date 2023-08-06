@@ -21,6 +21,8 @@ const router = express.Router();
 
 swagger.addPathAndOperation(SWAGGER_PATHS["SIGN_UP"]);
 router.post(ROUTES.SIGN_UP, signUpNewUser);
+
+swagger.addPathAndOperation(SWAGGER_PATHS["SIGN_IN"]);
 router.post(ROUTES.SIGN_IN, signInCurrentUser);
 
 router.post(
