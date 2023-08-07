@@ -31,8 +31,8 @@ export class User extends Model<
   declare email: string;
   declare password: string;
 
-  declare setMedia: HasOneSetAssociationMixin<Media, string>;
-  declare getMedia: HasOneGetAssociationMixin<Media>;
+  declare setMedium: HasOneSetAssociationMixin<Media, string>;
+  declare getMedium: HasOneGetAssociationMixin<Media>;
 
   declare getCreatedClasses: HasManyGetAssociationsMixin<Class>;
   declare removeCreatedClasses: HasManyRemoveAssociationMixin<Class, string>;

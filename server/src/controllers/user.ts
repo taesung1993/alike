@@ -180,10 +180,15 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
 export const uploadAvatar = async (req: Request, res: Response) => {
   const { medium } = req.body;
-  const id = res.locals.user.id;
+  const id = res.locals.user;
 
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      include: {
+        all: true,
+        nested: true,
+      },
+    });
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
@@ -200,7 +205,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
       });
     }
 
-    await user.setMedia(medium);
+    await user.setMedium(medium);
 
     return res.status(RESPONSE_CODE.OK).json({ message: "success" });
   } catch (error) {

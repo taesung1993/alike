@@ -1,4 +1,4 @@
-import { category, medium, token } from "../schemas";
+import { category, medium, token, user } from "../schemas";
 
 const definition = {
   openapi: "3.1.0",
@@ -28,6 +28,7 @@ const definition = {
       category,
       medium,
       token,
+      user,
     },
   },
 

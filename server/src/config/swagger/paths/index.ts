@@ -7,7 +7,16 @@ import {
 
 import { GET_MEDIA, GET_MEDIUM, UPLOAD_MEDIA, DELETE_MEDIA } from "./media";
 
-import { SIGN_UP, SIGN_IN, SEND_VERIFICATION_EMAIL } from "./user";
+import {
+  SIGN_UP,
+  SIGN_IN,
+  SEND_VERIFICATION_EMAIL,
+  VERIFY_EMAIL,
+  UPLOAD_AVATAR,
+  CHECK_DUPLICATE_EMAIL,
+  GET_ME,
+  DELETE_USER,
+} from "./user";
 
 export const PATHS = {
   GET_CATEGORIES,
@@ -23,4 +32,9 @@ export const PATHS = {
   SIGN_UP,
   SIGN_IN,
   SEND_VERIFICATION_EMAIL,
+  VERIFY_EMAIL,
+  UPLOAD_AVATAR,
+  CHECK_DUPLICATE_EMAIL,
+  GET_ME,
+  DELETE_USER,
 };

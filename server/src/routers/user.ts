@@ -31,8 +31,11 @@ router.post(
   VALIDATORS.SEND_VERIFICATION_EMAIL,
   sendVerificationEmail
 );
+
+swagger.addPathAndOperation(SWAGGER_PATHS["VERIFY_EMAIL"]);
 router.post(ROUTES.VERIFY_EMAIL, VALIDATORS.VERIFY_EMAIL, verifyEmail);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["UPLOAD_AVATAR"]);
 router.post(
   ROUTES.UPLOAD_AVATAR,
   authMiddleware,
@@ -40,16 +43,21 @@ router.post(
   uploadAvatar
 );
 
+swagger.addPathAndOperation(SWAGGER_PATHS["CHECK_DUPLICATE_EMAIL"]);
 router.get(
   ROUTES.CHECK_DUPLICATE_EMAIL,
   VALIDATORS.CHECK_DUPLICATE_EMAIL,
   getIsDuplicateEmail
 );
+
+swagger.addPathAndOperation(SWAGGER_PATHS["GET_ME"]);
 router.get(ROUTES.GET_ME, authMiddleware, getMe);
+
 router.get(ROUTES.CREATED_CLASSES, authMiddleware, getCreatedClasses);
 router.get(ROUTES.JOINED_CLASSES, authMiddleware, getJoinedClasses);
 router.get(ROUTES.LIKED_CLASSES, authMiddleware, getLikedClasses);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["DELETE_USER"]);
 router.delete(ROUTES.DELETE_USER, authMiddleware, deleteUser);
 
 export default router;
