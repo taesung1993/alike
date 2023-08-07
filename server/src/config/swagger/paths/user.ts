@@ -94,3 +94,48 @@ export const SIGN_IN = {
     },
   },
 };
+
+export const SEND_VERIFICATION_EMAIL = {
+  METHOD: "post",
+  ROUTE: "/user/send/verification-email",
+  OPERATION: {
+    tags: ["User"],
+    summary: "이메일 인증코드 요청",
+    description: "해당 이메일로 인증 코드를 요청합니다.",
+    requestBody: {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            required: ["email", "password"],
+            properties: {
+              email: {
+                type: "string",
+                description: "이메일",
+                example: "cheonyulin@gmail.com",
+              },
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      [RESPONSE_CODE.OK]: {
+        description: "인증코드 요청 완료",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                success: {
+                  type: "boolean",
+                  example: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};

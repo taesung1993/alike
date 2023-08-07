@@ -25,6 +25,7 @@ router.post(ROUTES.SIGN_UP, signUpNewUser);
 swagger.addPathAndOperation(SWAGGER_PATHS["SIGN_IN"]);
 router.post(ROUTES.SIGN_IN, signInCurrentUser);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["SEND_VERIFICATION_EMAIL"]);
 router.post(
   ROUTES.SEND_VERIFICATION_EMAIL,
   VALIDATORS.SEND_VERIFICATION_EMAIL,
