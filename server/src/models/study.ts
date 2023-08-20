@@ -19,7 +19,7 @@ import { sequelize } from "@config/db";
 import { Media } from "./media";
 import { User } from "./user";
 
-export interface IClass {
+export interface IStudy {
   id: string;
   name: string;
   description: string;
@@ -30,9 +30,9 @@ export interface IClass {
   category: number;
 }
 
-export class Class extends Model<
-  InferAttributes<Class>,
-  InferCreationAttributes<Class>
+export class Study extends Model<
+  InferAttributes<Study>,
+  InferCreationAttributes<Study>
 > {
   declare id: CreationOptional<string>;
   declare name: string;
@@ -59,11 +59,11 @@ export class Class extends Model<
   declare hasLike: BelongsToManyHasAssociationMixin<User, string>;
 
   static associations: {
-    media: Association<Class, Media>;
+    media: Association<Study, Media>;
   };
 }
 
-Class.init(
+Study.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -101,7 +101,7 @@ Class.init(
     },
   },
   {
-    tableName: "class",
+    tableName: "study",
     sequelize,
   }
 );

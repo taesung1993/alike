@@ -7,7 +7,7 @@ import {
   InferCreationAttributes,
   Model,
 } from "sequelize";
-import { Class } from "@models/class";
+import { Study } from "@models/study";
 import { sequelize } from "@config/db";
 
 export interface ICategory {
@@ -22,7 +22,7 @@ export class Category extends Model<
   declare id: CreationOptional<Category>;
   declare name: string;
 
-  declare getClasses: HasManyGetAssociationsMixin<Class>;
+  declare getClasses: HasManyGetAssociationsMixin<Study>;
   declare countClasses: HasManyCountAssociationsMixin;
 }
 

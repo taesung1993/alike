@@ -7,20 +7,20 @@ import {
 } from "sequelize";
 import { sequelize } from "@config/db";
 
-export interface IJoinedClass {
+export interface IJoinedStudy {
   id: string;
   userType: string;
 }
 
-export class JoinedClass extends Model<
-  InferAttributes<JoinedClass>,
-  InferCreationAttributes<JoinedClass>
+export class JoinedStudy extends Model<
+  InferAttributes<JoinedStudy>,
+  InferCreationAttributes<JoinedStudy>
 > {
   declare id: CreationOptional<string>;
   declare userType: string;
 }
 
-JoinedClass.init(
+JoinedStudy.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -34,7 +34,7 @@ JoinedClass.init(
     },
   },
   {
-    tableName: "joinedClass",
+    tableName: "joinedStudy",
     sequelize,
   }
 );

@@ -1,20 +1,20 @@
 import { Category } from "./category";
-import { Class } from "./class";
-import { JoinedClass } from "./joinedClass";
-import { LikedClass } from "./likedClass";
+import { Study } from "./study";
+import { JoinedStudy } from "./joinedStudy";
+import { LikedStudy } from "./likedStudy";
 import { Media } from "./media";
 import { User } from "./user";
 
-Category.hasMany(Class, {
+Category.hasMany(Study, {
   foreignKey: "category",
   constraints: false,
   as: "classes",
 });
-Class.belongsTo(Category, {
+Study.belongsTo(Category, {
   foreignKey: "category",
 });
 
-Class.hasMany(Media, {
+Study.hasMany(Media, {
   foreignKey: "application",
   constraints: false,
   scope: {
@@ -22,32 +22,32 @@ Class.hasMany(Media, {
   },
   as: "media",
 });
-Media.belongsTo(Class, {
+Media.belongsTo(Study, {
   targetKey: "id",
   foreignKey: "application",
   constraints: false,
 });
 
-User.hasMany(Class, {
+User.hasMany(Study, {
   foreignKey: "creator",
-  as: "createdClasses",
+  as: "createdStudies",
   constraints: false,
   onDelete: "CASCADE",
 });
-Class.belongsTo(User, {
+Study.belongsTo(User, {
   foreignKey: "creator",
   constraints: false,
   onDelete: "CASCADE",
 });
 
-Class.belongsToMany(User, {
+Study.belongsToMany(User, {
   as: "participants",
-  through: JoinedClass,
+  through: JoinedStudy,
 });
-User.belongsToMany(Class, { as: "joinedClasses", through: JoinedClass });
+User.belongsToMany(Study, { as: "joinedStudies", through: JoinedStudy });
 
-Class.belongsToMany(User, { as: "likes", through: LikedClass });
-User.belongsToMany(Class, { as: "likedClasses", through: LikedClass });
+Study.belongsToMany(User, { as: "likes", through: LikedStudy });
+User.belongsToMany(Study, { as: "likedClasses", through: LikedStudy });
 
 User.hasOne(Media, {
   foreignKey: "application",

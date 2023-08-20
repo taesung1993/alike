@@ -13,7 +13,7 @@ import {
 } from "sequelize";
 import { sequelize } from "@config/db";
 import { Media } from "./media";
-import { Class } from "./class";
+import { Study } from "./study";
 
 export interface IUser {
   id: string;
@@ -34,11 +34,11 @@ export class User extends Model<
   declare setMedium: HasOneSetAssociationMixin<Media, string>;
   declare getMedium: HasOneGetAssociationMixin<Media>;
 
-  declare getCreatedClasses: HasManyGetAssociationsMixin<Class>;
-  declare removeCreatedClasses: HasManyRemoveAssociationMixin<Class, string>;
+  declare getCreatedClasses: HasManyGetAssociationsMixin<Study>;
+  declare removeCreatedClasses: HasManyRemoveAssociationMixin<Study, string>;
 
-  declare getJoinedClasses: BelongsToManyGetAssociationsMixin<Class>;
-  declare getLikedClasses: BelongsToManyGetAssociationsMixin<Class>;
+  declare getJoinedClasses: BelongsToManyGetAssociationsMixin<Study>;
+  declare getLikedClasses: BelongsToManyGetAssociationsMixin<Study>;
 
   static associations: {
     avatar: Association<User, Media>;

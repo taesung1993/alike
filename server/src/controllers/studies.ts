@@ -1,14 +1,14 @@
 import CustomError from "@classes/custom-error.class";
 import { sequelize } from "@config/db";
 import { RESPONSE_CODE } from "@config/errors";
-import { Class } from "@models/class";
+import { Study } from "@models/study";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { BaseError } from "sequelize";
 
 export const getStudies = async (_: Request, res: Response) => {
   try {
-    const classes = await Class.findAll({
+    const classes = await Study.findAll({
       include: [
         {
           association: "media",
@@ -53,7 +53,7 @@ export const getStudies = async (_: Request, res: Response) => {
 export const getStudy = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
-    const classItem = await Class.findByPk(id, {
+    const classItem = await Study.findByPk(id, {
       include: [
         {
           association: "media",
@@ -122,7 +122,7 @@ export const createStudy = async (req: Request, res: Response) => {
     }
 
     const userId = res.locals.user as string;
-    const createdClassItem = await Class.create({
+    const createdClassItem = await Study.create({
       name,
       description,
       location,
@@ -169,7 +169,7 @@ export const joinStudy = async (req: Request, res: Response) => {
   const userId = res.locals.user;
 
   try {
-    const foundClass = await Class.findByPk(classId);
+    const foundClass = await Study.findByPk(classId);
 
     if (!foundClass) {
       throw new CustomError({
@@ -201,7 +201,7 @@ export const withdrawalStudy = async (req: Request, res: Response) => {
   const userId = res.locals.user;
 
   try {
-    const foundClass = await Class.findByPk(classId);
+    const foundClass = await Study.findByPk(classId);
 
     if (!foundClass) {
       throw new CustomError({
@@ -240,7 +240,7 @@ export const likeStudy = async (req: Request, res: Response) => {
   const classId = req.params._id;
 
   try {
-    const foundClass = await Class.findByPk(classId, {
+    const foundClass = await Study.findByPk(classId, {
       include: {
         all: true,
         nested: true,
@@ -273,7 +273,7 @@ export const cancelToLikeStudy = async (req: Request, res: Response) => {
   const classId = req.params._id;
 
   try {
-    const foundClass = await Class.findByPk(classId, {
+    const foundClass = await Study.findByPk(classId, {
       include: {
         all: true,
         nested: true,
@@ -315,7 +315,7 @@ export const patchStudy = async (req: Request, res: Response) => {
     const id = req.params._id as string | undefined;
     const body = req.body;
 
-    const classItem = await Class.findByPk(id);
+    const classItem = await Study.findByPk(id);
     if (!classItem) {
       throw new CustomError({
         status: RESPONSE_CODE.NOT_FOUND,
@@ -341,7 +341,7 @@ export const patchStudy = async (req: Request, res: Response) => {
 export const deleteStudy = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
-    const classItem = await Class.findByPk(id);
+    const classItem = await Study.findByPk(id);
 
     if (!classItem) {
       throw new CustomError({

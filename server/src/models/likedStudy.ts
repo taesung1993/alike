@@ -7,18 +7,18 @@ import {
 } from "sequelize";
 import { sequelize } from "@config/db";
 
-export interface ILikedClass {
+export interface ILikedStudy {
   id: string;
 }
 
-export class LikedClass extends Model<
-  InferAttributes<LikedClass>,
-  InferCreationAttributes<LikedClass>
+export class LikedStudy extends Model<
+  InferAttributes<LikedStudy>,
+  InferCreationAttributes<LikedStudy>
 > {
   declare id: CreationOptional<string>;
 }
 
-LikedClass.init(
+LikedStudy.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -28,7 +28,7 @@ LikedClass.init(
     },
   },
   {
-    tableName: "likedClass",
+    tableName: "likedStudy",
     sequelize,
   }
 );
