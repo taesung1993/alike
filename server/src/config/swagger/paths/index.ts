@@ -18,7 +18,17 @@ import {
   DELETE_USER,
 } from "./user";
 
-import { GET_CLASSES } from "./study";
+import {
+  GET_CLASSES,
+  GET_CLASS,
+  CREATE_CLASS,
+  JOIN_CLASS,
+  WITHDRAWAL_CLASS,
+  LIKE_CLASS,
+  CANCEL_LIKE_CLASS,
+  PATCH_CLASS,
+  DELETE_CLASS,
+} from "./study";
 
 export const PATHS = {
   GET_CATEGORIES,
@@ -41,4 +51,12 @@ export const PATHS = {
   DELETE_USER,
 
   GET_CLASSES,
+  GET_CLASS,
+  CREATE_CLASS,
+  JOIN_CLASS,
+  WITHDRAWAL_CLASS,
+  LIKE_CLASS,
+  CANCEL_LIKE_CLASS,
+  PATCH_CLASS,
+  DELETE_CLASS,
 };
