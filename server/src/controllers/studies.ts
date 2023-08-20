@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { BaseError } from "sequelize";
 
-export const getClasses = async (_: Request, res: Response) => {
+export const getStudies = async (_: Request, res: Response) => {
   try {
     const classes = await Class.findAll({
       include: [
@@ -50,7 +50,7 @@ export const getClasses = async (_: Request, res: Response) => {
   }
 };
 
-export const getClass = async (req: Request, res: Response) => {
+export const getStudy = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
     const classItem = await Class.findByPk(id, {
@@ -99,7 +99,7 @@ export const getClass = async (req: Request, res: Response) => {
   }
 };
 
-export const createClass = async (req: Request, res: Response) => {
+export const createStudy = async (req: Request, res: Response) => {
   const {
     name,
     description,
@@ -164,7 +164,7 @@ export const createClass = async (req: Request, res: Response) => {
   }
 };
 
-export const joinClass = async (req: Request, res: Response) => {
+export const joinStudy = async (req: Request, res: Response) => {
   const classId = req.params._id;
   const userId = res.locals.user;
 
@@ -196,7 +196,7 @@ export const joinClass = async (req: Request, res: Response) => {
   }
 };
 
-export const withdrawalClass = async (req: Request, res: Response) => {
+export const withdrawalStudy = async (req: Request, res: Response) => {
   const classId = req.params._id;
   const userId = res.locals.user;
 
@@ -235,7 +235,7 @@ export const withdrawalClass = async (req: Request, res: Response) => {
   }
 };
 
-export const likeClass = async (req: Request, res: Response) => {
+export const likeStudy = async (req: Request, res: Response) => {
   const userId = res.locals.user;
   const classId = req.params._id;
 
@@ -268,7 +268,7 @@ export const likeClass = async (req: Request, res: Response) => {
   }
 };
 
-export const cancelToLikeClass = async (req: Request, res: Response) => {
+export const cancelToLikeStudy = async (req: Request, res: Response) => {
   const userId = res.locals.user;
   const classId = req.params._id;
 
@@ -310,7 +310,7 @@ export const cancelToLikeClass = async (req: Request, res: Response) => {
   }
 };
 
-export const patchClass = async (req: Request, res: Response) => {
+export const patchStudy = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
     const body = req.body;
@@ -338,7 +338,7 @@ export const patchClass = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteClass = async (req: Request, res: Response) => {
+export const deleteStudy = async (req: Request, res: Response) => {
   try {
     const id = req.params._id as string | undefined;
     const classItem = await Class.findByPk(id);

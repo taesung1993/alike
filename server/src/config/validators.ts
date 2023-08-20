@@ -8,7 +8,7 @@ const VALIDATORS = {
       .withMessage("'name'(body) is empty or missing"),
   ],
 
-  CREATE_CLASS: [
+  CREATE_STUDY: [
     body("name")
       .trim()
       .notEmpty()

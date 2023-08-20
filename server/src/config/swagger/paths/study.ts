@@ -1,8 +1,8 @@
 import { RESPONSE_CODE } from "@config/errors";
 
-export const GET_CLASSES = {
+export const GET_STUDIES = {
   METHOD: "get",
-  ROUTE: "/classes",
+  ROUTE: "/studies",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 리스트 불러오기",
@@ -30,9 +30,9 @@ export const GET_CLASSES = {
   },
 };
 
-export const GET_CLASS = {
+export const GET_STUDY = {
   METHOD: "get",
-  ROUTE: "/classes/{_id}",
+  ROUTE: "/studies/{_id}",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 불러오기",
@@ -67,9 +67,9 @@ export const GET_CLASS = {
   },
 };
 
-export const CREATE_CLASS = {
+export const CREATE_STUDY = {
   METHOD: "post",
-  ROUTE: "/classes",
+  ROUTE: "/studies",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 생성하기",
@@ -164,9 +164,9 @@ export const CREATE_CLASS = {
   },
 };
 
-export const JOIN_CLASS = {
+export const JOIN_STUDY = {
   METHOD: "post",
-  ROUTE: "/classes/{_id}/join",
+  ROUTE: "/studies/{_id}/join",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 가입하기",
@@ -206,9 +206,9 @@ export const JOIN_CLASS = {
   },
 };
 
-export const WITHDRAWAL_CLASS = {
+export const WITHDRAWAL_STUDY = {
   METHOD: "post",
-  ROUTE: "/classes/{_id}/withdrawal",
+  ROUTE: "/studies/{_id}/withdrawal",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 탈퇴하기",
@@ -248,9 +248,9 @@ export const WITHDRAWAL_CLASS = {
   },
 };
 
-export const LIKE_CLASS = {
+export const LIKE_STUDY = {
   METHOD: "post",
-  ROUTE: "/classes/{_id}/like",
+  ROUTE: "/studies/{_id}/like",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 즐겨찾기",
@@ -290,9 +290,9 @@ export const LIKE_CLASS = {
   },
 };
 
-export const CANCEL_LIKE_CLASS = {
+export const CANCEL_LIKE_STUDY = {
   METHOD: "post",
-  ROUTE: "/classes/{_id}/like/cancel",
+  ROUTE: "/studies/{_id}/like/cancel",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 즐겨찾기 취소",
@@ -332,9 +332,9 @@ export const CANCEL_LIKE_CLASS = {
   },
 };
 
-export const PATCH_CLASS = {
+export const PATCH_STUDY = {
   METHOD: "patch",
-  ROUTE: "/classes/{_id}",
+  ROUTE: "/studies/{_id}",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 정보 수정",
@@ -427,9 +427,9 @@ export const PATCH_CLASS = {
   },
 };
 
-export const DELETE_CLASS = {
+export const DELETE_STUDY = {
   METHOD: "delete",
-  ROUTE: "/classes/{_id}",
+  ROUTE: "/studies/{_id}",
   OPERATION: {
     tags: ["Study"],
     summary: "스터디 삭제",
