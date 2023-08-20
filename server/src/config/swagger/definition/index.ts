@@ -1,4 +1,4 @@
-import { category, medium, token, user } from "../schemas";
+import { category, medium, token, user, study, participant } from "../schemas";
 
 const definition = {
   openapi: "3.1.0",
@@ -29,6 +29,8 @@ const definition = {
       medium,
       token,
       user,
+      study,
+      participant,
     },
   },
 
@@ -44,6 +46,10 @@ const definition = {
     {
       name: "User",
       description: "유저 API",
+    },
+    {
+      name: "Study",
+      description: "스터디 API",
     },
   ],
 

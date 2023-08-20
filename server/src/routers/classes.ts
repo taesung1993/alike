@@ -13,11 +13,13 @@ import {
 import ROUTES from "@config/routes";
 import VALIDATORS from "@config/validators";
 import { authMiddleware } from "@middlewares/auth.middleware";
+import { SWAGGER_PATHS, swagger } from "@config/swagger";
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
+swagger.addPathAndOperation(SWAGGER_PATHS["GET_CLASSES"]);
 router.get(ROUTES.GET_CLASSES, getClasses);
 router.get(ROUTES.GET_CLASS, getClass);
 

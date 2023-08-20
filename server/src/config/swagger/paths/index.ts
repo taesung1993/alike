@@ -18,6 +18,8 @@ import {
   DELETE_USER,
 } from "./user";
 
+import { GET_CLASSES } from "./study";
+
 export const PATHS = {
   GET_CATEGORIES,
   GET_CATEGORY,
@@ -37,4 +39,6 @@ export const PATHS = {
   CHECK_DUPLICATE_EMAIL,
   GET_ME,
   DELETE_USER,
+
+  GET_CLASSES,
 };
