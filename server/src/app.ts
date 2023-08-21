@@ -4,7 +4,6 @@ import routers from "@routers/.";
 import { sequelize } from "@config/db";
 import { redis } from "@config/redis";
 import swagger from "@config/swagger/swagger";
-import "@models/assocations";
 
 const app: Express = express();
 

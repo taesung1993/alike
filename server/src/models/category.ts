@@ -6,9 +6,10 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  Sequelize,
 } from "sequelize";
 import { Study } from "@models/study";
-import { sequelize } from "@config/db";
+import { IModel } from ".";
 
 export interface ICategory {
   id: number;
@@ -24,25 +25,35 @@ export class Category extends Model<
 
   declare getClasses: HasManyGetAssociationsMixin<Study>;
   declare countClasses: HasManyCountAssociationsMixin;
-}
 
-Category.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "category",
-    sequelize,
+  static initModel(sequelize: Sequelize): typeof Category {
+    Category.init(
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {
+        tableName: "category",
+        sequelize,
+      }
+    );
+
+    return Category;
   }
-);
 
-export default {};
+  static associate({ Study }: IModel) {
+    Category.hasMany(Study, {
+      foreignKey: "category",
+      constraints: false,
+      as: "classes",
+    });
+  }
+}

@@ -4,8 +4,9 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  Sequelize,
 } from "sequelize";
-import { sequelize } from "@config/db";
+import { IModel } from ".";
 
 export interface IMedia {
   id: string;
@@ -24,36 +25,52 @@ export class Media extends Model<
   declare name: CreationOptional<string>;
   declare type: CreationOptional<string>;
   declare model: string;
-}
 
-Media.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    url: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    model: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    tableName: "media",
-    sequelize,
+  static initModel(sequelize: Sequelize): typeof Media {
+    Media.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+        },
+        url: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        type: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        model: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+      },
+      {
+        tableName: "media",
+        sequelize,
+      }
+    );
+
+    return Media;
   }
-);
 
-export default {};
+  static associate({ Study, User }: IModel) {
+    Media.belongsTo(Study, {
+      targetKey: "id",
+      foreignKey: "application",
+      constraints: false,
+    });
+
+    Media.belongsTo(User, {
+      targetKey: "id",
+      foreignKey: "application",
+      constraints: false,
+    });
+  }
+}

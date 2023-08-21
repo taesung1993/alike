@@ -4,8 +4,8 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  Sequelize,
 } from "sequelize";
-import { sequelize } from "@config/db";
 
 export interface IJoinedStudy {
   id: string;
@@ -18,25 +18,29 @@ export class JoinedStudy extends Model<
 > {
   declare id: CreationOptional<string>;
   declare userType: string;
-}
 
-JoinedStudy.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false,
-    },
-    userType: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "joinedStudy",
-    sequelize,
+  static initModel(sequelize: Sequelize): typeof JoinedStudy {
+    JoinedStudy.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+          allowNull: false,
+        },
+        userType: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {
+        tableName: "joinedStudy",
+        sequelize,
+      }
+    );
+
+    return JoinedStudy;
   }
-);
+}
 
 export default {};

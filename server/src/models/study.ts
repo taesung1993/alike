@@ -14,10 +14,11 @@ import {
   BelongsToManyRemoveAssociationMixin,
   BelongsToManyAddAssociationsMixin,
   BelongsToManyHasAssociationMixin,
+  Sequelize,
 } from "sequelize";
-import { sequelize } from "@config/db";
 import { Media } from "./media";
 import { User } from "./user";
+import { IModel } from ".";
 
 export interface IStudy {
   id: string;
@@ -61,49 +62,79 @@ export class Study extends Model<
   static associations: {
     media: Association<Study, Media>;
   };
-}
 
-Study.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    location: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    startDate: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    maximumPerson: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    category: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "study",
-    sequelize,
+  static initModel(sequelize: Sequelize): typeof Study {
+    Study.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        description: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        location: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        startDate: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        status: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        maximumPerson: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        category: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+      },
+      {
+        tableName: "study",
+        sequelize,
+      }
+    );
+
+    return Study;
   }
-);
 
-export default {};
+  static associate({ Category, Media, User, JoinedStudy, LikedStudy }: IModel) {
+    Study.belongsTo(Category, {
+      foreignKey: "category",
+    });
+
+    Study.hasMany(Media, {
+      foreignKey: "application",
+      constraints: false,
+      scope: {
+        model: "class",
+      },
+      as: "media",
+    });
+
+    Study.belongsTo(User, {
+      foreignKey: "creator",
+      constraints: false,
+      onDelete: "CASCADE",
+    });
+
+    Study.belongsToMany(User, {
+      as: "participants",
+      through: JoinedStudy,
+    });
+
+    Study.belongsToMany(User, { as: "likes", through: LikedStudy });
+  }
+}

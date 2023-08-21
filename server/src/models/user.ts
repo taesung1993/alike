@@ -10,10 +10,11 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  Sequelize,
 } from "sequelize";
-import { sequelize } from "@config/db";
 import { Media } from "./media";
 import { Study } from "./study";
+import { IModel } from ".";
 
 export interface IUser {
   id: string;
@@ -43,34 +44,60 @@ export class User extends Model<
   static associations: {
     avatar: Association<User, Media>;
   };
-}
 
-User.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "user",
-    sequelize,
+  static initModel(sequelize: Sequelize): typeof User {
+    User.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+        },
+        password: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {
+        tableName: "user",
+        sequelize,
+      }
+    );
+
+    return User;
   }
-);
+
+  static associate({ Study, JoinedStudy, LikedStudy, Media }: IModel) {
+    User.hasMany(Study, {
+      foreignKey: "creator",
+      as: "createdStudies",
+      constraints: false,
+      onDelete: "CASCADE",
+    });
+
+    User.hasOne(Media, {
+      foreignKey: "application",
+      constraints: false,
+      scope: {
+        model: "user",
+      },
+      as: "medium",
+    });
+
+    User.belongsToMany(Study, { as: "joinedStudies", through: JoinedStudy });
+
+    User.belongsToMany(Study, { as: "likedClasses", through: LikedStudy });
+  }
+}
 
 export default {};

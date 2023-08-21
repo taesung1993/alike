@@ -4,8 +4,8 @@ import {
   InferAttributes,
   InferCreationAttributes,
   Model,
+  Sequelize,
 } from "sequelize";
-import { sequelize } from "@config/db";
 
 export interface ILikedStudy {
   id: string;
@@ -16,21 +16,23 @@ export class LikedStudy extends Model<
   InferCreationAttributes<LikedStudy>
 > {
   declare id: CreationOptional<string>;
-}
 
-LikedStudy.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "likedStudy",
-    sequelize,
+  static initModel(sequelize: Sequelize): typeof LikedStudy {
+    LikedStudy.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+          allowNull: false,
+        },
+      },
+      {
+        tableName: "likedStudy",
+        sequelize,
+      }
+    );
+
+    return LikedStudy;
   }
-);
-
-export default {};
+}

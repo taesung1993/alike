@@ -1,3 +1,4 @@
+import { initAssociates, initModels } from "@models/index";
 import { Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize(
@@ -12,7 +13,11 @@ export const sequelize = new Sequelize(
 
 export const initDatabase = async () => {
   try {
+    initModels(sequelize);
+    initAssociates();
+
     await sequelize.authenticate();
+
     console.log("Database Connected");
   } catch (error) {
     console.log("Database Connection Error:", error);
